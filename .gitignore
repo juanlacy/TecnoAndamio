@@ -59,3 +59,11 @@ coverage/
 tmp/
 temp/
 *.tmp
+tmpclaude-*
+
+# Logs
+logs/
+*.log
+
+# Claude
+.claude/settings.local.json
