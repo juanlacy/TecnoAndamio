@@ -1,0 +1,20 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "angular.ng-template",
+    "ms-vscode.vscode-typescript-next",
+    "johnpapa.angular2",
+    "ckolkman.vscode-postgres",
+    "formulahendry.auto-rename-tag",
+    "formulahendry.auto-close-tag",
+    "christian-kohler.path-intellisense",
+    "eamodio.gitlens",
+    "github.copilot",
+    "ms-azuretools.vscode-docker",
+    "humao.rest-client",
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "gruntfuggly.todo-tree"
+  ]
+}
