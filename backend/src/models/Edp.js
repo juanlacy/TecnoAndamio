@@ -36,12 +36,25 @@ const Edp = (sequelize) => {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
+      orden_compra: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+      },
       fecha_inicio: {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
+      fecha_corte: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
       fecha_termino: {
         type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
+      unidad_alquiler: {
+        type: DataTypes.ENUM('Valor UF', 'Pesos'),
+        defaultValue: 'Valor UF',
         allowNull: false,
       },
       estado: {
@@ -68,6 +81,10 @@ const Edp = (sequelize) => {
       },
       comentarios: {
         type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      url_orden_compra: {
+        type: DataTypes.STRING(255),
         allowNull: true,
       },
       created_at: {
