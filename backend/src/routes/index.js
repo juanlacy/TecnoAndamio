@@ -1,5 +1,7 @@
 import express from 'express';
 import authRoutes from './authRoutes.js';
+import dashboardRoutes from './dashboardRoutes.js';
+import rolRoutes from './rolRoutes.js';
 
 const router = express.Router();
 
@@ -27,10 +29,20 @@ router.get('/health', (req, res) => {
 router.use('/auth', authRoutes);
 
 /**
- * TODO: Agregar rutas en Fase 3
- * router.use('/dashboard', dashboardRoutes);
+ * @route /api/v1/dashboard/*
+ * Rutas de dashboard (estadísticas)
+ */
+router.use('/dashboard', dashboardRoutes);
+
+/**
+ * @route /api/v1/roles/*
+ * Rutas de roles (solo lectura)
+ */
+router.use('/roles', rolRoutes);
+
+/**
+ * TODO: Agregar más rutas en Fase 3
  * router.use('/usuarios', usuarioRoutes);
- * router.use('/roles', rolRoutes);
  * router.use('/clientes', clienteRoutes);
  * router.use('/obras', obraRoutes);
  * router.use('/categorias-equipos', categoriaEquipoRoutes);
