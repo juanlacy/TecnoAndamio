@@ -6,6 +6,10 @@ import compression from 'compression';
 import rateLimit from 'express-rate-limit';
 import { config } from './config/env.js';
 import logger from './utils/logger.js';
+import db from './models/index.js';
+import routes from './routes/index.js';
+import { errorHandler, notFoundHandler } from './middlewares/errorHandler.js';
+import requestLogger from './middlewares/requestLogger.js';
 
 const app = express();
 
@@ -58,6 +62,9 @@ if (config.nodeEnv === 'development') {
   }));
 }
 
+// Request Logger personalizado
+app.use(requestLogger);
+
 // ======================
 // RUTAS
 // ======================
@@ -82,28 +89,18 @@ app.get('/', (req, res) => {
   });
 });
 
-// TODO: Importar y usar rutas de la API
-// import routes from './routes/index.js';
-// app.use('/api/v1', routes);
+// API Routes
+app.use('/api/v1', routes);
 
 // ======================
 // MANEJO DE ERRORES
 // ======================
 
 // Ruta no encontrada (404)
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    error: {
-      code: 'NOT_FOUND',
-      message: `Ruta ${req.method} ${req.path} no encontrada`,
-    },
-  });
-});
+app.use(notFoundHandler);
 
 // Error handler global
-// TODO: Importar y usar errorHandler middleware
-// app.use(errorHandler);
+app.use(errorHandler);
 
 // ======================
 // INICIAR SERVIDOR
@@ -113,15 +110,17 @@ const PORT = config.port;
 
 const startServer = async () => {
   try {
-    // TODO: Verificar conexión a la base de datos
-    // await sequelize.authenticate();
-    // logger.info('✅ Conexión a MySQL establecida correctamente');
+    // Verificar conexión a la base de datos
+    await db.sequelize.authenticate();
+    logger.info('✅ Conexión a MySQL establecida correctamente');
 
     app.listen(PORT, () => {
       logger.info(`🚀 Servidor corriendo en puerto ${PORT}`);
       logger.info(`📝 Ambiente: ${config.nodeEnv}`);
       logger.info(`🌐 Frontend URL: ${config.frontendUrl}`);
       logger.info(`💾 Base de datos: ${config.db.name}@${config.db.host}:${config.db.port}`);
+      logger.info(`📡 API disponible en: http://localhost:${PORT}/api/v1`);
+      logger.info(`🏥 Health check: http://localhost:${PORT}/health`);
     });
   } catch (error) {
     logger.error('❌ Error al iniciar el servidor:', error);
