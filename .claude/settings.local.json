@@ -11,7 +11,8 @@
       "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: Agregar resumen ejecutivo de la sesión\n\nResumen detallado que incluye:\n- ✅ Logros completados \\(CRUD Usuarios 100%\\)\n- 📦 Entregables con características\n- 📊 Estadísticas de código \\(~2,032 líneas\\)\n- 🎨 Elementos de diseño implementados\n- 🔧 Correcciones técnicas realizadas\n- 📈 Progreso del proyecto \\(60% completado\\)\n- 🚀 Próxima sesión: Módulo de Obras\n- 📝 Instrucciones para continuar\n\nFacilita retomar el trabajo en la próxima sesión.\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git commit:*)",
       "Bash(ls:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(git push:*)"
     ]
   }
 }
