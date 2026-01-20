@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug TecnoAndamio</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        .section {
+            background: #252526;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #007acc;
+        }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .warning { color: #ce9178; }
+        pre {
+            background: #1e1e1e;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        h2 { color: #4ec9b0; }
+        button {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #005a9e; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug TecnoAndamio - Producción</h1>
+
+    <button onclick="runAllTests()">▶️ Ejecutar Todas las Pruebas</button>
+    <button onclick="clearStorage()">🗑️ Limpiar LocalStorage</button>
+    <button onclick="location.reload()">🔄 Recargar Página</button>
+
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+
+        function log(title, content, type = 'info') {
+            const color = type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : '';
+            results.innerHTML += `
+                <div class="section">
+                    <h2>${title}</h2>
+                    <pre class="${color}">${typeof content === 'object' ? JSON.stringify(content, null, 2) : content}</pre>
+                </div>
+            `;
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            log('✅ Storage Limpiado', 'LocalStorage y SessionStorage limpiados. Recarga la página.', 'success');
+        }
+
+        async function runAllTests() {
+            results.innerHTML = '<h2>Ejecutando pruebas...</h2>';
+
+            // Test 1: LocalStorage
+            log('1️⃣ LocalStorage', '');
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+
+            log('Token existe', token ? '✅ Sí' : '❌ No', token ? 'success' : 'error');
+            log('Usuario existe', userStr ? '✅ Sí' : '❌ No', userStr ? 'success' : 'error');
+
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    log('Datos del Usuario', user);
+                    log('Campo rol', user.rol || 'No existe');
+                    log('Campo roles', user.roles || 'No existe');
+
+                    if (user.roles) {
+                        log('Tipo de roles', Array.isArray(user.roles) ? 'Array ✅' : typeof user.roles,
+                            Array.isArray(user.roles) ? 'success' : 'error');
+                        log('Cantidad de roles', user.roles.length);
+                        log('Roles', user.roles);
+                    }
+                } catch (e) {
+                    log('❌ Error parseando usuario', e.message, 'error');
+                }
+            }
+
+            // Test 2: Backend /auth/me
+            if (token) {
+                log('2️⃣ Probando Backend - /api/v1/auth/me', '');
+                try {
+                    const response = await fetch('/api/v1/auth/me', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    log('Status', response.status);
+                    log('Response', data);
+
+                    if (data.success && data.data && data.data.usuario) {
+                        log('✅ Backend funciona correctamente', '', 'success');
+                        log('Usuario del backend', data.data.usuario);
+                    } else {
+                        log('❌ Backend retorna error', data.error || 'Unknown', 'error');
+                    }
+                } catch (err) {
+                    log('❌ Error conectando al backend', err.message, 'error');
+                }
+            }
+
+            // Test 3: Backend /obras
+            if (token) {
+                log('3️⃣ Probando Backend - /api/v1/obras', '');
+                try {
+                    const response = await fetch('/api/v1/obras', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+                    log('Status', response.status);
+
+                    if (response.status === 200) {
+                        log('✅ Endpoint /obras funciona', '', 'success');
+                        log('Response', data);
+                    } else {
+                        log('❌ Error en /obras', data, 'error');
+                    }
+                } catch (err) {
+                    log('❌ Error en /obras', err.message, 'error');
+                }
+            }
+
+            // Test 4: Verificar archivos JS cargados
+            log('4️⃣ Archivos JavaScript Cargados', '');
+            const resources = performance.getEntriesByType('resource')
+                .filter(r => r.name.includes('.js'))
+                .map(r => ({
+                    archivo: r.name.split('/').pop(),
+                    tamaño: Math.round(r.transferSize / 1024) + ' KB',
+                    cache: r.transferSize === 0 ? '🟡 CACHE' : '🟢 NETWORK'
+                }));
+
+            log('Archivos JS', resources);
+
+            const cached = resources.filter(r => r.cache.includes('CACHE')).length;
+            const total = resources.length;
+
+            if (cached > total / 2) {
+                log('⚠️ ADVERTENCIA', `${cached} de ${total} archivos vienen del caché. Presiona Ctrl+F5 para forzar recarga.`, 'warning');
+            }
+
+            // Test 5: Verificar elementos del DOM
+            log('5️⃣ Elementos del DOM', '');
+            setTimeout(() => {
+                const sidebar = document.querySelector('mat-sidenav') || document.querySelector('[role="navigation"]');
+                log('Sidebar existe', sidebar ? '✅ Sí' : '❌ No', sidebar ? 'success' : 'error');
+
+                const links = document.querySelectorAll('a');
+                const menuLinks = Array.from(links)
+                    .filter(link => link.href && !link.href.includes('http'))
+                    .map(link => link.textContent?.trim())
+                    .filter(text => text);
+
+                log('Links del menú', menuLinks.length > 0 ? menuLinks : 'No se encontraron links');
+
+                const usuariosLink = Array.from(links).find(link =>
+                    link.textContent?.toLowerCase().includes('usuario')
+                );
+
+                log('Link "Usuarios" existe', usuariosLink ? '✅ Sí' : '❌ No',
+                    usuariosLink ? 'success' : 'error');
+            }, 2000);
+
+            log('✅ Pruebas Completadas', 'Revisa los resultados arriba.', 'success');
+        }
+
+        // Auto-ejecutar al cargar
+        window.addEventListener('load', () => {
+            setTimeout(runAllTests, 500);
+        });
+    </script>
+</body>
+</html>

@@ -2,11 +2,11 @@ export interface Usuario {
   id: number;
   nombre: string;
   email: string;
-  rol: string;  // 'admin' | 'usuario'
+  rol?: string;  // 'admin' | 'usuario' - Deprecado, usar roles
+  roles?: string[];  // Array de nombres de roles: ['admin', 'usuario']
   activo: boolean;
   created_at?: string;
   updated_at?: string;
-  roles?: Rol[];
 }
 
 export interface Rol {

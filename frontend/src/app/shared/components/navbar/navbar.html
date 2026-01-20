@@ -22,7 +22,7 @@
     <div class="user-menu-header">
       <p class="user-email">{{ user.email }}</p>
       @if (user.roles && user.roles.length > 0) {
-        <p class="user-role">{{ user.roles[0].nombre }}</p>
+        <p class="user-role">{{ user.roles[0] }}</p>
       }
     </div>
   }

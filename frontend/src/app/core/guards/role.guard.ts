@@ -18,7 +18,10 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
       return false;
     }
 
-    const hasRole = user.roles.some(role => allowedRoles.includes(role.nombre));
+    // roles es ahora un array de strings: ['admin', 'usuario']
+    const hasRole = user.roles.some(role =>
+      allowedRoles.some(allowed => allowed.toLowerCase() === role.toLowerCase())
+    );
     if (hasRole) {
       return true;
     }

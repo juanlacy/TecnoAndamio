@@ -61,7 +61,7 @@ export class Sidebar {
       label: 'Usuarios',
       icon: 'admin_panel_settings',
       route: '/usuarios',
-      roles: ['Admin']  // Only visible to Admin
+      roles: ['Admin', 'admin']  // Visible to Admin (supports both formats)
     }
   ];
 
@@ -71,10 +71,26 @@ export class Sidebar {
     }
 
     const user = this.authService.getCurrentUser();
-    if (!user || !user.roles) {
+    if (!user) {
       return false;
     }
 
-    return user.roles.some(role => item.roles?.includes(role.nombre));
+    // Check roles array (backend devuelve roles como array de strings)
+    if (user.roles && Array.isArray(user.roles)) {
+      return item.roles.some(menuRole =>
+        user.roles!.some(userRole =>
+          userRole.toLowerCase() === menuRole.toLowerCase()
+        )
+      );
+    }
+
+    // Fallback: check rol string (legacy support)
+    if (user.rol) {
+      return item.roles.some(role =>
+        role.toLowerCase() === user.rol!.toLowerCase()
+      );
+    }
+
+    return false;
   }
 }

@@ -73,12 +73,25 @@ export class AuthService {
 
   hasRole(roleName: string): boolean {
     const user = this.currentUser();
-    if (!user || !user.roles) return false;
-    return user.roles.some(role => role.nombre === roleName);
+    if (!user) return false;
+
+    // Soporte para roles como array de strings (backend actual)
+    if (user.roles && Array.isArray(user.roles)) {
+      return user.roles.some(role =>
+        role.toLowerCase() === roleName.toLowerCase()
+      );
+    }
+
+    // Soporte legacy para rol como string
+    if (user.rol) {
+      return user.rol.toLowerCase() === roleName.toLowerCase();
+    }
+
+    return false;
   }
 
   isAdmin(): boolean {
-    return this.hasRole('Admin');
+    return this.hasRole('admin');
   }
 
   refreshToken(): Observable<any> {

@@ -84,7 +84,8 @@ export class UsuariosListComponent implements OnInit {
     const filtered = this.usuarios().filter(usuario =>
       usuario.nombre.toLowerCase().includes(term) ||
       usuario.email.toLowerCase().includes(term) ||
-      usuario.rol.toLowerCase().includes(term)
+      (usuario.rol && usuario.rol.toLowerCase().includes(term)) ||
+      (usuario.roles && usuario.roles.some(r => r.toLowerCase().includes(term)))
     );
     this.filteredUsuarios.set(filtered);
   }
