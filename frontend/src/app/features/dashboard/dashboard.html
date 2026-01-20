@@ -1,0 +1,87 @@
+<div class="dashboard-content">
+    <h1>Panel de Control</h1>
+
+    @if (loading()) {
+      <div class="loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Cargando estadísticas...</p>
+      </div>
+    } @else if (stats(); as dashStats) {
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <mat-card class="stat-card clients-card">
+          <mat-card-content>
+            <div class="stat-icon">
+              <mat-icon>people</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h2>{{ dashStats.total_clientes }}</h2>
+              <p>Clientes</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card obras-card">
+          <mat-card-content>
+            <div class="stat-icon">
+              <mat-icon>construction</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h2>{{ dashStats.total_obras }}</h2>
+              <p>Obras</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card edp-card">
+          <mat-card-content>
+            <div class="stat-icon">
+              <mat-icon>description</mat-icon>
+            </div>
+            <div class="stat-info">
+              <h2>{{ dashStats.edps_activos }}</h2>
+              <p>EDPs Activos</p>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- EDP por Estado -->
+      @if (dashStats.edps_por_estado && Object.keys(dashStats.edps_por_estado).length > 0) {
+        <mat-card class="edp-estados-card">
+          <mat-card-header>
+            <mat-card-title>Estados de Pago por Estado</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="estados-grid">
+              @for (estado of Object.keys(dashStats.edps_por_estado); track estado) {
+                <div class="estado-item">
+                  <span class="estado-label">{{ estado }}</span>
+                  <span class="estado-count">{{ dashStats.edps_por_estado[estado] }}</span>
+                </div>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    }
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <h2>Acciones Rápidas</h2>
+      <div class="actions-grid">
+        <button mat-raised-button color="primary" (click)="navigateTo('/clientes')">
+          <mat-icon>person_add</mat-icon>
+          <span>Nuevo Cliente</span>
+        </button>
+        <button mat-raised-button color="primary" (click)="navigateTo('/obras')">
+          <mat-icon>add_business</mat-icon>
+          <span>Nueva Obra</span>
+        </button>
+        <button mat-raised-button color="primary" (click)="navigateTo('/edp')">
+          <mat-icon>note_add</mat-icon>
+          <span>Nuevo EDP</span>
+        </button>
+      </div>
+    </div>
+</div>

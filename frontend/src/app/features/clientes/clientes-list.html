@@ -1,0 +1,133 @@
+<div class="clientes-container">
+  <div class="header">
+    <h1>Gestión de Clientes</h1>
+    <button mat-raised-button color="primary" (click)="onCreate()">
+      <mat-icon>add</mat-icon>
+      Nuevo Cliente
+    </button>
+  </div>
+
+  <!-- Buscador -->
+  <mat-card class="search-card">
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar clientes</mat-label>
+        <input
+          matInput
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+          placeholder="Buscar por nombre, RUT o email..."
+        >
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="onSearch()">
+        Buscar
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <app-loading message="Cargando clientes..."></app-loading>
+  }
+
+  <!-- Tabla de Clientes -->
+  @if (!loading()) {
+    <mat-card class="table-card">
+      <mat-card-content>
+        @if (clientes().length === 0) {
+          <div class="empty-state">
+            <mat-icon>people_outline</mat-icon>
+            <p>No hay clientes registrados</p>
+            <button mat-raised-button color="primary" (click)="onCreate()">
+              Crear primer cliente
+            </button>
+          </div>
+        } @else {
+          <table mat-table [dataSource]="clientes()" class="clientes-table">
+            <!-- RUT Column -->
+            <ng-container matColumnDef="rut">
+              <th mat-header-cell *matHeaderCellDef>RUT</th>
+              <td mat-cell *matCellDef="let cliente">
+                {{ cliente.rut | rutFormat }}
+              </td>
+            </ng-container>
+
+            <!-- Nombre Column -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Razón Social</th>
+              <td mat-cell *matCellDef="let cliente">
+                {{ cliente.razon_social }}
+                @if (cliente.nombre_fantasia) {
+                  <br><small style="color: rgba(0, 0, 0, 0.6);">({{ cliente.nombre_fantasia }})</small>
+                }
+              </td>
+            </ng-container>
+
+            <!-- Email Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>Email</th>
+              <td mat-cell *matCellDef="let cliente">
+                {{ cliente.email || '-' }}
+              </td>
+            </ng-container>
+
+            <!-- Teléfono Column -->
+            <ng-container matColumnDef="telefono">
+              <th mat-header-cell *matHeaderCellDef>Teléfono</th>
+              <td mat-cell *matCellDef="let cliente">
+                {{ cliente.telefono || '-' }}
+              </td>
+            </ng-container>
+
+            <!-- Activo Column -->
+            <ng-container matColumnDef="activo">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let cliente">
+                <span [class.active-badge]="cliente.activo" [class.inactive-badge]="!cliente.activo">
+                  {{ cliente.activo ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Acciones Column -->
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let cliente">
+                <div class="action-buttons">
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="onView(cliente)"
+                    matTooltip="Ver detalles"
+                  >
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="accent"
+                    (click)="onEdit(cliente)"
+                    matTooltip="Editar"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="onDelete(cliente)"
+                    matTooltip="Eliminar"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

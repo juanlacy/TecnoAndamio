@@ -1,0 +1,116 @@
+<div class="detail-container">
+  <div class="header">
+    <button mat-icon-button (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Detalle del Cliente</h1>
+    @if (cliente()) {
+      <button mat-raised-button color="primary" (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <app-loading message="Cargando cliente..."></app-loading>
+  }
+
+  @if (!loading() && cliente(); as clienteData) {
+    <mat-card class="detail-card">
+      <mat-card-header>
+        <div class="card-header-content">
+          <div class="client-name">
+            <mat-icon>business</mat-icon>
+            <div>
+              <h2>{{ clienteData.razon_social }}</h2>
+              @if (clienteData.nombre_fantasia) {
+                <p class="subtitle">{{ clienteData.nombre_fantasia }}</p>
+              }
+            </div>
+          </div>
+          <mat-chip [class.active-chip]="clienteData.activo" [class.inactive-chip]="!clienteData.activo">
+            {{ clienteData.activo ? 'Activo' : 'Inactivo' }}
+          </mat-chip>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-grid">
+          <!-- RUT -->
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>badge</mat-icon>
+              <span>RUT</span>
+            </div>
+            <div class="info-value">{{ clienteData.rut | rutFormat }}</div>
+          </div>
+
+          <!-- Email -->
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>email</mat-icon>
+              <span>Email</span>
+            </div>
+            <div class="info-value">{{ clienteData.email || 'No registrado' }}</div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="info-item">
+            <div class="info-label">
+              <mat-icon>phone</mat-icon>
+              <span>Teléfono</span>
+            </div>
+            <div class="info-value">{{ clienteData.telefono || 'No registrado' }}</div>
+          </div>
+
+          <!-- Dirección -->
+          <div class="info-item full-width">
+            <div class="info-label">
+              <mat-icon>location_on</mat-icon>
+              <span>Dirección</span>
+            </div>
+            <div class="info-value">{{ clienteData.direccion || 'No registrada' }}</div>
+          </div>
+
+          <!-- Fecha de Creación -->
+          @if (clienteData.created_at) {
+            <div class="info-item">
+              <div class="info-label">
+                <mat-icon>calendar_today</mat-icon>
+                <span>Fecha de Registro</span>
+              </div>
+              <div class="info-value">{{ clienteData.created_at | dateFormat:'long' }}</div>
+            </div>
+          }
+
+          <!-- Última Actualización -->
+          @if (clienteData.updated_at) {
+            <div class="info-item">
+              <div class="info-label">
+                <mat-icon>update</mat-icon>
+                <span>Última Actualización</span>
+              </div>
+              <div class="info-value">{{ clienteData.updated_at | dateFormat:'long' }}</div>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Sección de Obras Asociadas (placeholder para futura implementación) -->
+    <mat-card class="related-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>construction</mat-icon>
+          Obras Asociadas
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="placeholder-text">
+          Las obras asociadas a este cliente se mostrarán aquí una vez implementado el módulo de Obras.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

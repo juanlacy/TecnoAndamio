@@ -1,0 +1,145 @@
+<div class="form-container">
+  <div class="header">
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ isEditMode() ? 'Editar Cliente' : 'Nuevo Cliente' }}</h1>
+  </div>
+
+  @if (loading()) {
+    <app-loading [message]="isEditMode() ? 'Cargando cliente...' : 'Guardando...'"></app-loading>
+  }
+
+  @if (!loading()) {
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
+          <!-- RUT -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>RUT</mat-label>
+            <input
+              matInput
+              formControlName="rut"
+              placeholder="12.345.678-9"
+              (input)="onRutInput()"
+              [class.invalid]="clienteForm.get('rut')?.invalid && clienteForm.get('rut')?.touched"
+            >
+            <mat-icon matSuffix>badge</mat-icon>
+            @if (clienteForm.get('rut')?.invalid && clienteForm.get('rut')?.touched) {
+              <mat-error>{{ getErrorMessage('rut') }}</mat-error>
+            }
+            <mat-hint>Ingrese el RUT sin puntos ni guión, se formateará automáticamente</mat-hint>
+          </mat-form-field>
+
+          <!-- Razón Social -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Razón Social</mat-label>
+            <input
+              matInput
+              formControlName="razon_social"
+              placeholder="Empresa Constructora S.A."
+              [class.invalid]="clienteForm.get('razon_social')?.invalid && clienteForm.get('razon_social')?.touched"
+            >
+            <mat-icon matSuffix>business</mat-icon>
+            @if (clienteForm.get('razon_social')?.invalid && clienteForm.get('razon_social')?.touched) {
+              <mat-error>{{ getErrorMessage('razon_social') }}</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Nombre Fantasía -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre Fantasía</mat-label>
+            <input
+              matInput
+              formControlName="nombre_fantasia"
+              placeholder="Constructora XYZ"
+              [class.invalid]="clienteForm.get('nombre_fantasia')?.invalid && clienteForm.get('nombre_fantasia')?.touched"
+            >
+            <mat-icon matSuffix>store</mat-icon>
+            @if (clienteForm.get('nombre_fantasia')?.invalid && clienteForm.get('nombre_fantasia')?.touched) {
+              <mat-error>{{ getErrorMessage('nombre_fantasia') }}</mat-error>
+            }
+            <mat-hint>Opcional - Nombre comercial del cliente</mat-hint>
+          </mat-form-field>
+
+          <!-- Email -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              placeholder="cliente@ejemplo.com"
+              [class.invalid]="clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched"
+            >
+            <mat-icon matSuffix>email</mat-icon>
+            @if (clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched) {
+              <mat-error>{{ getErrorMessage('email') }}</mat-error>
+            }
+            <mat-hint>Opcional</mat-hint>
+          </mat-form-field>
+
+          <!-- Teléfono -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Teléfono</mat-label>
+            <input
+              matInput
+              type="tel"
+              formControlName="telefono"
+              placeholder="+56912345678"
+              [class.invalid]="clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched"
+            >
+            <mat-icon matSuffix>phone</mat-icon>
+            @if (clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched) {
+              <mat-error>{{ getErrorMessage('telefono') }}</mat-error>
+            }
+            <mat-hint>Opcional - Formato: +56912345678</mat-hint>
+          </mat-form-field>
+
+          <!-- Dirección -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Dirección</mat-label>
+            <textarea
+              matInput
+              formControlName="direccion"
+              placeholder="Av. Libertador 1234, Santiago"
+              rows="3"
+            ></textarea>
+            <mat-icon matSuffix>location_on</mat-icon>
+            <mat-hint>Opcional</mat-hint>
+          </mat-form-field>
+
+          <!-- Activo -->
+          <div class="toggle-field">
+            <mat-slide-toggle formControlName="activo" color="primary">
+              Cliente Activo
+            </mat-slide-toggle>
+            <span class="toggle-hint">
+              Los clientes inactivos no aparecerán en los selectores
+            </span>
+          </div>
+
+          <!-- Botones -->
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              type="button"
+              (click)="onCancel()"
+            >
+              Cancelar
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="clienteForm.invalid || loading()"
+            >
+              <mat-icon>save</mat-icon>
+              {{ isEditMode() ? 'Actualizar' : 'Crear' }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

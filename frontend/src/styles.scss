@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Angular Material Theme (Material 3)
+@use '@angular/material' as mat;
+
+// Include Material core styles
+@include mat.core();
+
+// Define Material 3 theme
+$frontend-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  typography: (
+    brand-family: 'Roboto',
+    plain-family: 'Roboto',
+  ),
+  density: (
+    scale: 0,
+  )
+));
+
+// Apply the theme to all Angular Material components
+:root {
+  @include mat.all-component-themes($frontend-theme);
+}
+
+// Global styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
