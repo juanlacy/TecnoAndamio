@@ -19,22 +19,27 @@ export class ApiService {
         }
       });
     }
-    return this.http.get<T>(`${this.baseUrl}${path}`, { params: httpParams });
+    const url = path.startsWith('/') ? `${this.baseUrl}${path}` : `${this.baseUrl}/${path}`;
+    return this.http.get<T>(url, { params: httpParams });
   }
 
   post<T>(path: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}${path}`, body);
+    const url = path.startsWith('/') ? `${this.baseUrl}${path}` : `${this.baseUrl}/${path}`;
+    return this.http.post<T>(url, body);
   }
 
   put<T>(path: string, body: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}${path}`, body);
+    const url = path.startsWith('/') ? `${this.baseUrl}${path}` : `${this.baseUrl}/${path}`;
+    return this.http.put<T>(url, body);
   }
 
   patch<T>(path: string, body: any): Observable<T> {
-    return this.http.patch<T>(`${this.baseUrl}${path}`, body);
+    const url = path.startsWith('/') ? `${this.baseUrl}${path}` : `${this.baseUrl}/${path}`;
+    return this.http.patch<T>(url, body);
   }
 
   delete<T>(path: string): Observable<T> {
-    return this.http.delete<T>(`${this.baseUrl}${path}`);
+    const url = path.startsWith('/') ? `${this.baseUrl}${path}` : `${this.baseUrl}/${path}`;
+    return this.http.delete<T>(url);
   }
 }
