@@ -1,0 +1,173 @@
+<div class="obras-form-container">
+  <div class="header">
+    <h1>
+      <mat-icon>{{ isEditMode() ? 'edit' : 'add' }}</mat-icon>
+      {{ isEditMode() ? 'Editar Obra' : 'Nueva Obra' }}
+    </h1>
+  </div>
+
+  @if (loading()) {
+    <app-loading message="Cargando..."></app-loading>
+  } @else {
+    <form [formGroup]="obraForm" (ngSubmit)="onSubmit()">
+      <mat-card class="form-card">
+        <!-- Sección 1: Información Básica -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>info</mat-icon>
+            Información Básica
+          </h3>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Código de Obra</mat-label>
+              <input matInput formControlName="codigo" placeholder="OBR-2026-001">
+              <mat-icon matSuffix>tag</mat-icon>
+              <mat-hint>Código único identificador</mat-hint>
+              @if (obraForm.get('codigo')?.invalid && obraForm.get('codigo')?.touched) {
+                <mat-error>{{ getErrorMessage('codigo') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Cliente</mat-label>
+              <mat-select formControlName="cliente_id">
+                @for (cliente of clientesActivos(); track cliente.id) {
+                  <mat-option [value]="cliente.id">
+                    <div class="cliente-option">
+                      <strong>{{ cliente.razon_social }}</strong>
+                      <small>{{ cliente.rut | rutFormat }}</small>
+                    </div>
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matSuffix>business</mat-icon>
+              @if (obraForm.get('cliente_id')?.invalid && obraForm.get('cliente_id')?.touched) {
+                <mat-error>{{ getErrorMessage('cliente_id') }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre de la Obra</mat-label>
+            <input matInput formControlName="nombre" placeholder="Construcción Edificio Central">
+            <mat-icon matSuffix>apartment</mat-icon>
+            @if (obraForm.get('nombre')?.invalid && obraForm.get('nombre')?.touched) {
+              <mat-error>{{ getErrorMessage('nombre') }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="descripcion" rows="3" placeholder="Descripción detallada de la obra..."></textarea>
+            <mat-icon matSuffix>description</mat-icon>
+            <mat-hint>Opcional</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <!-- Sección 2: Ubicación -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>place</mat-icon>
+            Ubicación
+          </h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="direccion" placeholder="Av. Principal 1234">
+            <mat-icon matSuffix>location_on</mat-icon>
+            @if (obraForm.get('direccion')?.invalid && obraForm.get('direccion')?.touched) {
+              <mat-error>{{ getErrorMessage('direccion') }}</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Ciudad</mat-label>
+            <input matInput formControlName="ciudad" placeholder="Santiago">
+            <mat-icon matSuffix>location_city</mat-icon>
+            @if (obraForm.get('ciudad')?.invalid && obraForm.get('ciudad')?.touched) {
+              <mat-error>{{ getErrorMessage('ciudad') }}</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Sección 3: Planificación Temporal -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>event</mat-icon>
+            Planificación Temporal
+          </h3>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Fecha de Inicio</mat-label>
+              <input matInput type="date" formControlName="fecha_inicio">
+              <mat-icon matSuffix>event_available</mat-icon>
+              @if (obraForm.get('fecha_inicio')?.invalid && obraForm.get('fecha_inicio')?.touched) {
+                <mat-error>{{ getErrorMessage('fecha_inicio') }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Fecha Término Estimada</mat-label>
+              <input matInput type="date" formControlName="fecha_termino_estimada">
+              <mat-icon matSuffix>event_busy</mat-icon>
+              <mat-hint>Opcional</mat-hint>
+              @if (obraForm.get('fecha_termino_estimada')?.invalid && obraForm.get('fecha_termino_estimada')?.touched) {
+                <mat-error>{{ getErrorMessage('fecha_termino_estimada') }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Sección 4: Estado -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>settings</mat-icon>
+            Estado y Configuración
+          </h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="estado">
+              @for (estado of estadosObra; track estado.value) {
+                <mat-option [value]="estado.value">
+                  <div class="estado-option">
+                    <mat-icon>{{ estado.icon }}</mat-icon>
+                    {{ estado.label }}
+                  </div>
+                </mat-option>
+              }
+            </mat-select>
+            <mat-icon matSuffix>flag</mat-icon>
+            @if (obraForm.get('estado')?.invalid && obraForm.get('estado')?.touched) {
+              <mat-error>{{ getErrorMessage('estado') }}</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="toggle-field">
+            <mat-slide-toggle formControlName="activo" color="primary">
+              Obra Activa
+            </mat-slide-toggle>
+            <span class="toggle-hint">
+              <mat-icon>info</mat-icon>
+              Las obras inactivas no aparecerán en selectores
+            </span>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="form-actions">
+          <button mat-button type="button" (click)="onCancel()" class="cancel-button">
+            <mat-icon>close</mat-icon>
+            Cancelar
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="obraForm.invalid || loading()">
+            <mat-icon>{{ isEditMode() ? 'save' : 'add' }}</mat-icon>
+            {{ isEditMode() ? 'Guardar Cambios' : 'Crear Obra' }}
+          </button>
+        </div>
+      </mat-card>
+    </form>
+  }
+</div>

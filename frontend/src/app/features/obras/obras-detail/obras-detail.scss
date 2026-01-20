@@ -1,0 +1,359 @@
+.detail-container {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease-out;
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    animation: slideInRight 0.5s ease-out;
+
+    button[mat-icon-button] {
+      width: 48px;
+      height: 48px;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    h1 {
+      flex: 1;
+      margin: 0;
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+
+      button {
+        height: 48px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        mat-icon {
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+
+  .main-card {
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    margin-bottom: 32px;
+    overflow: hidden;
+
+    mat-card-header {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+      padding: 32px;
+
+      .obra-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+        width: 100%;
+
+        .obra-title {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          flex: 1;
+
+          .large-icon {
+            font-size: 64px;
+            width: 64px;
+            height: 64px;
+            color: #667eea;
+          }
+
+          h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+          }
+
+          .codigo {
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+          }
+        }
+
+        .badges {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          align-items: flex-end;
+
+          mat-chip {
+            font-weight: 600;
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            mat-icon {
+              font-size: 20px;
+              width: 20px;
+              height: 20px;
+            }
+
+            &.active-chip {
+              background: #e8f5e9;
+              color: #2e7d32;
+            }
+
+            &.inactive-chip {
+              background: #ffebee;
+              color: #c62828;
+            }
+          }
+        }
+      }
+    }
+
+    mat-card-content {
+      padding: 32px;
+
+      .description {
+        display: flex;
+        gap: 16px;
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        border-left: 4px solid #667eea;
+
+        mat-icon {
+          color: #667eea;
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+          flex-shrink: 0;
+        }
+
+        p {
+          margin: 0;
+          color: #555;
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+
+    .info-card {
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      mat-card-header {
+        background: #f8f9fa;
+        padding: 20px;
+
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin: 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
+
+          mat-icon {
+            color: #667eea;
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
+
+      mat-card-content {
+        padding: 24px;
+
+        .info-item {
+          margin-bottom: 16px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+          }
+
+          p, strong {
+            margin: 0;
+            font-size: 15px;
+            color: #333;
+            line-height: 1.5;
+          }
+
+          strong {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+          }
+
+          .rut {
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 500;
+            margin-top: 4px;
+          }
+
+          .secondary {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+          }
+
+          .no-data {
+            color: #999;
+            font-style: italic;
+          }
+        }
+
+        .no-data {
+          color: #999;
+          font-style: italic;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1024px) {
+  .detail-container {
+    .info-grid {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-container {
+    padding: 16px;
+
+    .header {
+      flex-wrap: wrap;
+
+      h1 {
+        font-size: 24px;
+        width: 100%;
+        order: 2;
+      }
+
+      button[mat-icon-button] {
+        order: 1;
+      }
+
+      .actions {
+        order: 3;
+        width: 100%;
+        margin-top: 16px;
+
+        button {
+          flex: 1;
+        }
+      }
+    }
+
+    .main-card {
+      mat-card-header {
+        padding: 20px;
+
+        .obra-header {
+          flex-direction: column;
+          align-items: flex-start;
+
+          .obra-title {
+            flex-direction: column;
+            align-items: flex-start;
+
+            .large-icon {
+              font-size: 48px;
+              width: 48px;
+              height: 48px;
+            }
+
+            h2 {
+              font-size: 22px;
+            }
+          }
+
+          .badges {
+            align-items: flex-start;
+            width: 100%;
+          }
+        }
+      }
+
+      mat-card-content {
+        padding: 20px;
+      }
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}

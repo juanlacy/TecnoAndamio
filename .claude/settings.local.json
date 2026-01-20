@@ -5,7 +5,13 @@
       "Bash(dir /s \"C:\\\\Proyecto\\\\TecnoAndamio\\\\backend\")",
       "Bash(test:*)",
       "Bash(npx ng generate component:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: Implementar CRUD completo de Usuarios\n\nCaracterísticas implementadas:\n- ✅ Modelo Usuario con DTOs \\(CreateUsuarioDto, UpdateUsuarioDto\\)\n- ✅ Servicio UsuariosService con operaciones CRUD completas\n- ✅ Lista de usuarios con tabla Material, búsqueda y filtros\n- ✅ Formulario crear/editar con validaciones\n- ✅ Vista detalle con información completa y permisos\n- ✅ Gestión de roles \\(admin/usuario\\)\n- ✅ Activar/desactivar usuarios\n- ✅ Cambio opcional de contraseña en edición\n- ✅ Diseño visual mejorado con gradientes y animaciones\n- ✅ Responsive design para móviles y tablets\n- ✅ Integración completa con rutas y navegación\n\nMódulo exclusivo para administradores del sistema.\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: Agregar documento de contexto completo del proyecto\n\nDocumento comprensivo que incluye:\n- Estado actual de módulos completados \\(Clientes, Usuarios\\)\n- Arquitectura del frontend con estructura detallada\n- Modelos y servicios implementados\n- Guía de diseño visual y estilos\n- Próximos pasos sugeridos \\(Obras, Equipos, EDP\\)\n- Comandos útiles y convenciones\n- Lecciones aprendidas\n\nFacilita la continuación del desarrollo en nuevas sesiones.\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: Agregar resumen ejecutivo de la sesión\n\nResumen detallado que incluye:\n- ✅ Logros completados \\(CRUD Usuarios 100%\\)\n- 📦 Entregables con características\n- 📊 Estadísticas de código \\(~2,032 líneas\\)\n- 🎨 Elementos de diseño implementados\n- 🔧 Correcciones técnicas realizadas\n- 📈 Progreso del proyecto \\(60% completado\\)\n- 🚀 Próxima sesión: Módulo de Obras\n- 📝 Instrucciones para continuar\n\nFacilita retomar el trabajo en la próxima sesión.\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(ls:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

@@ -1,0 +1,151 @@
+<div class="detail-container">
+  <div class="header">
+    <button mat-icon-button (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Detalle de Obra</h1>
+    <div class="actions">
+      <button mat-raised-button color="accent" (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <app-loading message="Cargando obra..."></app-loading>
+  }
+
+  @if (!loading() && obra()) {
+    @let obraData = obra()!;
+    <!-- Card Principal -->
+    <mat-card class="main-card">
+      <mat-card-header>
+        <div class="obra-header">
+          <div class="obra-title">
+            <mat-icon class="large-icon">apartment</mat-icon>
+            <div>
+              <h2>{{ obraData.nombre }}</h2>
+              <p class="codigo">Código: {{ obraData.codigo }}</p>
+            </div>
+          </div>
+          <div class="badges">
+            <mat-chip [color]="getEstadoColor(obraData.estado)" highlighted>
+              <mat-icon>{{ getEstadoIcon(obraData.estado) }}</mat-icon>
+              {{ getEstadoLabel(obraData.estado) }}
+            </mat-chip>
+            <mat-chip [class.active-chip]="obraData.activo" [class.inactive-chip]="!obraData.activo">
+              {{ obraData.activo ? 'Activa' : 'Inactiva' }}
+            </mat-chip>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (obraData.descripcion) {
+          <div class="description">
+            <mat-icon>description</mat-icon>
+            <p>{{ obraData.descripcion }}</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Grid de información -->
+    <div class="info-grid">
+      <!-- Card Cliente -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>business</mat-icon>
+            Cliente
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (obraData.cliente) {
+            <div class="info-item">
+              <strong>{{ obraData.cliente.razon_social }}</strong>
+              <p class="rut">RUT: {{ obraData.cliente.rut | rutFormat }}</p>
+              @if (obraData.cliente.nombre_fantasia) {
+                <p class="secondary">{{ obraData.cliente.nombre_fantasia }}</p>
+              }
+            </div>
+          } @else {
+            <p class="no-data">Cliente no disponible</p>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Card Ubicación -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>place</mat-icon>
+            Ubicación
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-item">
+            <label>Dirección:</label>
+            <p>{{ obraData.direccion }}</p>
+          </div>
+          <div class="info-item">
+            <label>Ciudad:</label>
+            <p>{{ obraData.ciudad }}</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Card Planificación -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>event</mat-icon>
+            Planificación
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="info-item">
+            <label>Inicio:</label>
+            <p>{{ obraData.fecha_inicio | date:'dd/MM/yyyy' }}</p>
+          </div>
+          @if (obraData.fecha_termino_estimada) {
+            <div class="info-item">
+              <label>Término Estimado:</label>
+              <p>{{ obraData.fecha_termino_estimada | date:'dd/MM/yyyy' }}</p>
+            </div>
+          } @else {
+            <div class="info-item">
+              <label>Término Estimado:</label>
+              <p class="no-data">No definido</p>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Card Metadata -->
+      <mat-card class="info-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>info</mat-icon>
+            Información del Sistema
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (obraData.created_at) {
+            <div class="info-item">
+              <label>Creada:</label>
+              <p>{{ obraData.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+          }
+          @if (obraData.updated_at) {
+            <div class="info-item">
+              <label>Última actualización:</label>
+              <p>{{ obraData.updated_at | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

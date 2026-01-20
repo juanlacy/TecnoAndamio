@@ -52,6 +52,22 @@ export const routes: Routes = [
       {
         path: 'usuarios/:id/editar',
         loadComponent: () => import('./features/usuarios/usuarios-form/usuarios-form').then(m => m.UsuariosFormComponent)
+      },
+      {
+        path: 'obras',
+        loadComponent: () => import('./features/obras/obras-list/obras-list').then(m => m.ObrasListComponent)
+      },
+      {
+        path: 'obras/nuevo',
+        loadComponent: () => import('./features/obras/obras-form/obras-form').then(m => m.ObrasFormComponent)
+      },
+      {
+        path: 'obras/:id',
+        loadComponent: () => import('./features/obras/obras-detail/obras-detail').then(m => m.ObrasDetailComponent)
+      },
+      {
+        path: 'obras/:id/editar',
+        loadComponent: () => import('./features/obras/obras-form/obras-form').then(m => m.ObrasFormComponent)
       }
     ]
   },
