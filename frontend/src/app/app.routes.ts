@@ -36,6 +36,22 @@ export const routes: Routes = [
       {
         path: 'clientes/ver/:id',
         loadComponent: () => import('./features/clientes/clientes-detail').then(m => m.ClientesDetail)
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () => import('./features/usuarios/usuarios-list/usuarios-list').then(m => m.UsuariosListComponent)
+      },
+      {
+        path: 'usuarios/nuevo',
+        loadComponent: () => import('./features/usuarios/usuarios-form/usuarios-form').then(m => m.UsuariosFormComponent)
+      },
+      {
+        path: 'usuarios/:id',
+        loadComponent: () => import('./features/usuarios/usuarios-detail/usuarios-detail').then(m => m.UsuariosDetailComponent)
+      },
+      {
+        path: 'usuarios/:id/editar',
+        loadComponent: () => import('./features/usuarios/usuarios-form/usuarios-form').then(m => m.UsuariosFormComponent)
       }
     ]
   },

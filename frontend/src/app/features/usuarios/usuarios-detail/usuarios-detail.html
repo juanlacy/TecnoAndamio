@@ -1,0 +1,161 @@
+<div class="detail-container">
+  <div class="header">
+    <button mat-icon-button (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>Detalle del Usuario</h1>
+    @if (!loading() && usuario()) {
+      <button mat-raised-button color="primary" (click)="onEdit()">
+        <mat-icon>edit</mat-icon>
+        Editar
+      </button>
+    }
+  </div>
+
+  @if (loading()) {
+    <app-loading message="Cargando usuario..."></app-loading>
+  }
+
+  @if (!loading() && usuario(); as user) {
+    <div class="detail-grid">
+      <!-- Tarjeta Principal -->
+      <mat-card class="main-card">
+        <mat-card-content>
+          <div class="user-avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+
+          <h2>{{ user.nombre }}</h2>
+
+          <div class="user-badges">
+            <mat-chip [color]="getRolColor(user.rol)" highlighted>
+              <mat-icon>{{ user.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+              {{ getRolLabel(user.rol) }}
+            </mat-chip>
+
+            <mat-chip
+              [color]="user.activo ? 'primary' : ''"
+              [highlighted]="user.activo"
+            >
+              <mat-icon>{{ user.activo ? 'check_circle' : 'cancel' }}</mat-icon>
+              {{ user.activo ? 'Activo' : 'Inactivo' }}
+            </mat-chip>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-section">
+            <h3>
+              <mat-icon>contact_mail</mat-icon>
+              Información de Contacto
+            </h3>
+
+            <div class="info-grid">
+              <div class="info-item">
+                <mat-icon>email</mat-icon>
+                <div>
+                  <span class="label">Email</span>
+                  <span class="value">{{ user.email }}</span>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <mat-icon>badge</mat-icon>
+                <div>
+                  <span class="label">ID</span>
+                  <span class="value">#{{ user.id }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="info-section">
+            <h3>
+              <mat-icon>schedule</mat-icon>
+              Información del Sistema
+            </h3>
+
+            <div class="info-grid">
+              <div class="info-item">
+                <mat-icon>event</mat-icon>
+                <div>
+                  <span class="label">Creado</span>
+                  <span class="value">{{ user.created_at | date:'medium' }}</span>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <mat-icon>update</mat-icon>
+                <div>
+                  <span class="label">Última Actualización</span>
+                  <span class="value">{{ user.updated_at | date:'medium' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Tarjeta de Permisos -->
+      <mat-card class="permissions-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>security</mat-icon>
+            Permisos del Rol
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @if (user.rol === 'admin') {
+            <div class="permission-list">
+              <div class="permission-item admin">
+                <mat-icon>admin_panel_settings</mat-icon>
+                <span>Administrador del Sistema</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>people</mat-icon>
+                <span>Gestión de Usuarios</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>business</mat-icon>
+                <span>Gestión de Clientes</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>construction</mat-icon>
+                <span>Gestión de Obras</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>inventory</mat-icon>
+                <span>Gestión de Equipos</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>receipt</mat-icon>
+                <span>Gestión de EDPs</span>
+              </div>
+            </div>
+          } @else {
+            <div class="permission-list">
+              <div class="permission-item">
+                <mat-icon>visibility</mat-icon>
+                <span>Visualización de Datos</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>construction</mat-icon>
+                <span>Gestión de Obras</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>inventory</mat-icon>
+                <span>Gestión de Equipos</span>
+              </div>
+              <div class="permission-item">
+                <mat-icon>receipt</mat-icon>
+                <span>Consulta de EDPs</span>
+              </div>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

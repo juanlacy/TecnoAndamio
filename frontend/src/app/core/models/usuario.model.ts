@@ -2,6 +2,7 @@ export interface Usuario {
   id: number;
   nombre: string;
   email: string;
+  rol: string;  // 'admin' | 'usuario'
   activo: boolean;
   created_at?: string;
   updated_at?: string;
@@ -30,4 +31,20 @@ export interface LoginResponse {
 export interface AuthUser {
   token: string;
   usuario: Usuario;
+}
+
+export interface CreateUsuarioDto {
+  nombre: string;
+  email: string;
+  password: string;
+  rol: string;
+  activo: boolean;
+}
+
+export interface UpdateUsuarioDto {
+  nombre?: string;
+  email?: string;
+  password?: string;
+  rol?: string;
+  activo?: boolean;
 }

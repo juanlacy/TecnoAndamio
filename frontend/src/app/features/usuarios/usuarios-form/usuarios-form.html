@@ -1,0 +1,151 @@
+<div class="form-container">
+  <div class="header">
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1>{{ isEditMode() ? 'Editar Usuario' : 'Nuevo Usuario' }}</h1>
+  </div>
+
+  @if (loading()) {
+    <app-loading [message]="isEditMode() ? 'Cargando usuario...' : 'Guardando...'"></app-loading>
+  }
+
+  @if (!loading()) {
+    <mat-card class="form-card">
+      <mat-card-content>
+        <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+          <!-- Sección: Información Personal -->
+          <div class="form-section">
+            <h3 class="section-title">
+              <mat-icon>person</mat-icon>
+              Información Personal
+            </h3>
+
+            <!-- Nombre -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nombre Completo</mat-label>
+              <input
+                matInput
+                formControlName="nombre"
+                placeholder="Juan Pérez García"
+                [class.invalid]="usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched"
+              />
+              <mat-icon matSuffix>badge</mat-icon>
+              @if (usuarioForm.get('nombre')?.invalid && usuarioForm.get('nombre')?.touched) {
+                <mat-error>{{ getErrorMessage('nombre') }}</mat-error>
+              }
+              <mat-hint>Nombre completo del usuario</mat-hint>
+            </mat-form-field>
+
+            <!-- Email -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input
+                matInput
+                type="email"
+                formControlName="email"
+                placeholder="usuario@ejemplo.com"
+                [class.invalid]="usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched"
+              />
+              <mat-icon matSuffix>email</mat-icon>
+              @if (usuarioForm.get('email')?.invalid && usuarioForm.get('email')?.touched) {
+                <mat-error>{{ getErrorMessage('email') }}</mat-error>
+              }
+              <mat-hint>Email corporativo del usuario</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <!-- Sección: Credenciales -->
+          <div class="form-section">
+            <h3 class="section-title">
+              <mat-icon>security</mat-icon>
+              Credenciales
+            </h3>
+
+            @if (isEditMode()) {
+              <div class="password-info">
+                <mat-icon>info</mat-icon>
+                <p>Deja el campo de contraseña vacío si no deseas cambiarla</p>
+              </div>
+            }
+
+            <!-- Contraseña -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ isEditMode() ? 'Nueva Contraseña (opcional)' : 'Contraseña' }}</mat-label>
+              <input
+                matInput
+                type="password"
+                formControlName="password"
+                [placeholder]="isEditMode() ? 'Dejar vacío para no cambiar' : 'Mínimo 6 caracteres'"
+                [class.invalid]="usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched"
+              />
+              <mat-icon matSuffix>lock</mat-icon>
+              @if (usuarioForm.get('password')?.invalid && usuarioForm.get('password')?.touched) {
+                <mat-error>{{ getErrorMessage('password') }}</mat-error>
+              }
+              @if (!isEditMode()) {
+                <mat-hint>Mínimo 6 caracteres</mat-hint>
+              }
+            </mat-form-field>
+
+            <!-- Rol -->
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Rol</mat-label>
+              <mat-select formControlName="rol">
+                @for (rol of roles; track rol.value) {
+                  <mat-option [value]="rol.value">
+                    <div class="rol-option">
+                      <mat-icon>{{ rol.value === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+                      {{ rol.label }}
+                    </div>
+                  </mat-option>
+                }
+              </mat-select>
+              <mat-icon matSuffix>assignment_ind</mat-icon>
+              <mat-hint>Define los permisos de acceso del usuario</mat-hint>
+            </mat-form-field>
+          </div>
+
+          <!-- Sección: Estado -->
+          <div class="form-section">
+            <h3 class="section-title">
+              <mat-icon>toggle_on</mat-icon>
+              Estado del Usuario
+            </h3>
+
+            <div class="toggle-field">
+              <mat-slide-toggle formControlName="activo" color="primary">
+                Usuario Activo
+              </mat-slide-toggle>
+              <span class="toggle-hint">
+                <mat-icon>info</mat-icon>
+                Los usuarios inactivos no podrán acceder al sistema
+              </span>
+            </div>
+          </div>
+
+          <!-- Botones de Acción -->
+          <div class="form-actions">
+            <button
+              type="button"
+              mat-stroked-button
+              (click)="onCancel()"
+            >
+              <mat-icon>cancel</mat-icon>
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              mat-raised-button
+              color="primary"
+              [disabled]="usuarioForm.invalid"
+            >
+              <mat-icon>{{ isEditMode() ? 'save' : 'person_add' }}</mat-icon>
+              {{ isEditMode() ? 'Guardar Cambios' : 'Crear Usuario' }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

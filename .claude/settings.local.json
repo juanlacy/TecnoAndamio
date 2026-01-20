@@ -3,7 +3,9 @@
     "allow": [
       "Bash(dir \"C:\\\\Proyecto\\\\TecnoAndamio\")",
       "Bash(dir /s \"C:\\\\Proyecto\\\\TecnoAndamio\\\\backend\")",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(npx ng generate component:*)",
+      "Bash(git add:*)"
     ]
   }
 }
