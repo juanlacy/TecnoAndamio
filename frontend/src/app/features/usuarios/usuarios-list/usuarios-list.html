@@ -33,7 +33,7 @@
           <mat-spinner diameter="50"></mat-spinner>
           <p>Cargando usuarios...</p>
         </div>
-      } @else if (filteredUsuarios().length === 0) {
+      } @else if (!hasData) {
         <div class="empty-state">
           <mat-icon>people_outline</mat-icon>
           <h2>No se encontraron usuarios</h2>
@@ -47,7 +47,7 @@
         </div>
       } @else {
         <div class="table-container">
-          <table mat-table [dataSource]="filteredUsuarios()" class="usuarios-table">
+          <table mat-table [dataSource]="dataSource" class="usuarios-table">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef>ID</th>
@@ -143,7 +143,7 @@
         </div>
 
         <div class="table-footer">
-          <p>Total de usuarios: <strong>{{ filteredUsuarios().length }}</strong></p>
+          <p>Total de usuarios: <strong>{{ totalUsuarios }}</strong></p>
         </div>
       }
     </mat-card-content>

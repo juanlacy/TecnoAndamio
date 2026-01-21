@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -42,6 +42,7 @@ export class ClientesList implements OnInit {
   private dialog = inject(MatDialog);
 
   clientes = signal<Cliente[]>([]);
+  dataSource = new MatTableDataSource<Cliente>([]);
   loading = signal(true);
   searchTerm = signal('');
 
@@ -59,6 +60,7 @@ export class ClientesList implements OnInit {
       next: (response) => {
         if (response.success) {
           this.clientes.set(response.data);
+          this.dataSource.data = response.data;
         }
         this.loading.set(false);
       },
@@ -113,5 +115,9 @@ export class ClientesList implements OnInit {
 
   onView(cliente: Cliente): void {
     this.router.navigate(['/clientes/ver', cliente.id]);
+  }
+
+  get hasData(): boolean {
+    return this.dataSource.data.length > 0;
   }
 }

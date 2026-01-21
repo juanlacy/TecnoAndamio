@@ -61,7 +61,7 @@
         <p>Cargando obras...</p>
       </div>
     } @else {
-      @if (filteredObras().length === 0) {
+      @if (!hasData) {
         <div class="empty-state">
           <mat-icon>construction</mat-icon>
           <h3>No hay obras registradas</h3>
@@ -72,7 +72,7 @@
           </button>
         </div>
       } @else {
-        <table mat-table [dataSource]="filteredObras()" class="obras-table">
+        <table mat-table [dataSource]="dataSource" class="obras-table">
           <!-- Columna Código -->
           <ng-container matColumnDef="codigo">
             <th mat-header-cell *matHeaderCellDef>Código</th>

@@ -9,7 +9,7 @@ const config = {
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
-    logging: false,
+    logging: console.log, // Activar SQL logging temporalmente
     timezone: '-03:00', // Chile timezone
     define: {
       timestamps: true,

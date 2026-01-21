@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
@@ -46,7 +46,7 @@ export class UsuariosListComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   usuarios = signal<Usuario[]>([]);
-  filteredUsuarios = signal<Usuario[]>([]);
+  dataSource = new MatTableDataSource<Usuario>([]);
   loading = signal(false);
   searchTerm = signal('');
 
@@ -61,7 +61,7 @@ export class UsuariosListComponent implements OnInit {
     this.usuariosService.getAll().subscribe({
       next: (usuarios) => {
         this.usuarios.set(usuarios);
-        this.filteredUsuarios.set(usuarios);
+        this.dataSource.data = usuarios;
         this.loading.set(false);
       },
       error: (error) => {
@@ -77,7 +77,7 @@ export class UsuariosListComponent implements OnInit {
     this.searchTerm.set(term);
 
     if (!term) {
-      this.filteredUsuarios.set(this.usuarios());
+      this.dataSource.data = this.usuarios();
       return;
     }
 
@@ -87,7 +87,7 @@ export class UsuariosListComponent implements OnInit {
       (usuario.rol && usuario.rol.toLowerCase().includes(term)) ||
       (usuario.roles && usuario.roles.some(r => r.toLowerCase().includes(term)))
     );
-    this.filteredUsuarios.set(filtered);
+    this.dataSource.data = filtered;
   }
 
   onCreate(): void {
@@ -166,5 +166,13 @@ export class UsuariosListComponent implements OnInit {
       default:
         return rol;
     }
+  }
+
+  get hasData(): boolean {
+    return this.dataSource.data.length > 0;
+  }
+
+  get totalUsuarios(): number {
+    return this.dataSource.data.length;
   }
 }

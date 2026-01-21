@@ -35,7 +35,7 @@
   @if (!loading()) {
     <mat-card class="table-card">
       <mat-card-content>
-        @if (clientes().length === 0) {
+        @if (!hasData) {
           <div class="empty-state">
             <mat-icon>people_outline</mat-icon>
             <p>No hay clientes registrados</p>
@@ -44,7 +44,7 @@
             </button>
           </div>
         } @else {
-          <table mat-table [dataSource]="clientes()" class="clientes-table">
+          <table mat-table [dataSource]="dataSource" class="clientes-table">
             <!-- RUT Column -->
             <ng-container matColumnDef="rut">
               <th mat-header-cell *matHeaderCellDef>RUT</th>

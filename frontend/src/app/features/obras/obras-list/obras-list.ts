@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -51,7 +51,7 @@ export class ObrasListComponent implements OnInit {
   private dialog = inject(MatDialog);
 
   obras = signal<Obra[]>([]);
-  filteredObras = signal<Obra[]>([]);
+  dataSource = new MatTableDataSource<Obra>([]);
   clientesActivos = signal<Cliente[]>([]);
   loading = signal(false);
 
@@ -124,7 +124,7 @@ export class ObrasListComponent implements OnInit {
       filtered = filtered.filter(obra => obra.estado === this.filtroEstado);
     }
 
-    this.filteredObras.set(filtered);
+    this.dataSource.data = filtered;
   }
 
   onCreate(): void {
@@ -200,5 +200,13 @@ export class ObrasListComponent implements OnInit {
       'finalizada': 'check_circle'
     };
     return icons[estado] || 'info';
+  }
+
+  get hasData(): boolean {
+    return this.dataSource.data.length > 0;
+  }
+
+  get totalObras(): number {
+    return this.dataSource.data.length;
   }
 }
