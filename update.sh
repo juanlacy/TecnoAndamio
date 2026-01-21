@@ -93,6 +93,14 @@ else
     exit 1
 fi
 
+# Copiar archivos al directorio web
+echo "   - Copiando archivos a /var/www/tecnoandamio..."
+sudo rm -rf /var/www/tecnoandamio/*
+sudo cp -r dist/frontend/browser/* /var/www/tecnoandamio/
+sudo chown -R www-data:www-data /var/www/tecnoandamio/
+sudo chmod -R 755 /var/www/tecnoandamio/
+echo -e "${GREEN}   ✓ Archivos copiados a producción${NC}"
+
 cd ..
 echo ""
 
