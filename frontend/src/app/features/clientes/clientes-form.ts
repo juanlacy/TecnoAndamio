@@ -118,6 +118,7 @@ export class ClientesForm implements OnInit {
 
     this.loading.set(true);
     const clienteData: ClienteCreateRequest = this.clienteForm.value;
+    console.log('Datos a enviar:', clienteData);
 
     const request$ = this.isEditMode() && this.clienteId
       ? this.clientesService.update(this.clienteId, clienteData)
@@ -137,7 +138,8 @@ export class ClientesForm implements OnInit {
       },
       error: (error) => {
         console.error('Error saving cliente:', error);
-        const message = error.error?.message || 'Error al guardar el cliente';
+        console.error('Error details:', error.error);
+        const message = error.error?.message || error.error?.error || 'Error al guardar el cliente';
         this.snackBar.open(message, 'Cerrar', { duration: 5000 });
         this.loading.set(false);
       }
