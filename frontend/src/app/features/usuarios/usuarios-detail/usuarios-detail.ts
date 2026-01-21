@@ -53,7 +53,6 @@ export class UsuariosDetailComponent implements OnInit {
     this.usuariosService.getById(id).subscribe({
       next: (response) => {
         if (response.success) { this.usuario.set(response.data); }
-        this.usuario.set(usuario);
         this.loading.set(false);
       },
       error: (error) => {
