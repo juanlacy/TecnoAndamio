@@ -36,6 +36,12 @@ const ComponenteEquipo = (sequelize) => {
         allowNull: false,
         comment: 'Precio por unidad en UF',
       },
+      activo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+        comment: 'Indica si el componente está activo',
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,

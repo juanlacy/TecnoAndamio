@@ -44,6 +44,12 @@ const Equipo = (sequelize) => {
         defaultValue: true,
         allowNull: false,
       },
+      activo: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+        comment: 'Indica si el equipo está activo',
+      },
       created_at: {
         type: DataTypes.DATE,
         allowNull: false,
