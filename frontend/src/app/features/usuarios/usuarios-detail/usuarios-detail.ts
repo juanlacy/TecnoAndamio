@@ -51,7 +51,8 @@ export class UsuariosDetailComponent implements OnInit {
   loadUsuario(id: number): void {
     this.loading.set(true);
     this.usuariosService.getById(id).subscribe({
-      next: (usuario) => {
+      next: (response) => {
+        if (response.success) { this.usuario.set(response.data); }
         this.usuario.set(usuario);
         this.loading.set(false);
       },

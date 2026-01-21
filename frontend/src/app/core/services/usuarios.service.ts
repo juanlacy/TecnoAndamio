@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Usuario, CreateUsuarioDto, UpdateUsuarioDto } from '../models/usuario.model';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,33 +11,33 @@ export class UsuariosService {
   private apiService = inject(ApiService);
   private readonly endpoint = 'usuarios';
 
-  getAll(): Observable<Usuario[]> {
-    return this.apiService.get<Usuario[]>(this.endpoint);
+  getAll(): Observable<ApiResponse<Usuario[]>> {
+    return this.apiService.get<ApiResponse<Usuario[]>>(this.endpoint);
   }
 
-  getById(id: number): Observable<Usuario> {
-    return this.apiService.get<Usuario>(`${this.endpoint}/${id}`);
+  getById(id: number): Observable<ApiResponse<Usuario>> {
+    return this.apiService.get<ApiResponse<Usuario>>(`${this.endpoint}/${id}`);
   }
 
-  create(usuario: CreateUsuarioDto): Observable<Usuario> {
-    return this.apiService.post<Usuario>(this.endpoint, usuario);
+  create(usuario: CreateUsuarioDto): Observable<ApiResponse<Usuario>> {
+    return this.apiService.post<ApiResponse<Usuario>>(this.endpoint, usuario);
   }
 
-  update(id: number, usuario: UpdateUsuarioDto): Observable<Usuario> {
-    return this.apiService.put<Usuario>(`${this.endpoint}/${id}`, usuario);
+  update(id: number, usuario: UpdateUsuarioDto): Observable<ApiResponse<Usuario>> {
+    return this.apiService.put<ApiResponse<Usuario>>(`${this.endpoint}/${id}`, usuario);
   }
 
-  delete(id: number): Observable<void> {
-    return this.apiService.delete<void>(`${this.endpoint}/${id}`);
+  delete(id: number): Observable<ApiResponse<void>> {
+    return this.apiService.delete<ApiResponse<void>>(`${this.endpoint}/${id}`);
   }
 
   // Activar/Desactivar usuario
-  toggleActive(id: number, activo: boolean): Observable<Usuario> {
-    return this.apiService.put<Usuario>(`${this.endpoint}/${id}`, { activo });
+  toggleActive(id: number, activo: boolean): Observable<ApiResponse<Usuario>> {
+    return this.apiService.put<ApiResponse<Usuario>>(`${this.endpoint}/${id}`, { activo });
   }
 
   // Cambiar contraseña
-  changePassword(id: number, newPassword: string): Observable<void> {
-    return this.apiService.put<void>(`${this.endpoint}/${id}/password`, { password: newPassword });
+  changePassword(id: number, newPassword: string): Observable<ApiResponse<void>> {
+    return this.apiService.put<ApiResponse<void>>(`${this.endpoint}/${id}/password`, { password: newPassword });
   }
 }

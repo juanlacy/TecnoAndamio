@@ -77,7 +77,9 @@ export class UsuariosFormComponent implements OnInit {
 
     this.loading.set(true);
     this.usuariosService.getById(this.usuarioId).subscribe({
-      next: (usuario) => {
+      next: (response) => {
+        if (!response.success) return;
+        const usuario = response.data;
         // En modo edición, la contraseña es opcional
         this.usuarioForm.patchValue({
           nombre: usuario.nombre,
@@ -127,7 +129,8 @@ export class UsuariosFormComponent implements OnInit {
       }
 
       this.usuariosService.update(this.usuarioId, updateDto).subscribe({
-        next: () => {
+        next: (response) => {
+          if (!response.success) return;
           this.snackBar.open('Usuario actualizado exitosamente', 'Cerrar', { duration: 3000 });
           this.router.navigate(['/usuarios']);
         },

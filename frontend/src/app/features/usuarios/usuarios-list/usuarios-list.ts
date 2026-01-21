@@ -92,9 +92,8 @@ export class UsuariosListComponent implements OnInit {
   loadUsuarios(): void {
     this.loading.set(true);
     this.usuariosService.getAll().subscribe({
-      next: (usuarios) => {
-        this.usuarios.set(usuarios);
-        this.dataSource.data = usuarios;
+      next: (response) => {
+        if (response.success) { this.usuarios.set(response.data); this.dataSource.data = response.data; }
         this.loading.set(false);
       },
       error: (error) => {
@@ -134,7 +133,8 @@ export class UsuariosListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.usuariosService.delete(usuario.id).subscribe({
-          next: () => {
+          next: (response) => {
+          if (!response.success) return;
             this.snackBar.open('Usuario eliminado exitosamente', 'Cerrar', { duration: 3000 });
             this.loadUsuarios();
           },
@@ -152,7 +152,8 @@ export class UsuariosListComponent implements OnInit {
     const newStatus = !usuario.activo;
 
     this.usuariosService.toggleActive(usuario.id, newStatus).subscribe({
-      next: () => {
+      next: (response) => {
+          if (!response.success) return;
         this.snackBar.open(
           `Usuario ${newStatus ? 'activado' : 'desactivado'} exitosamente`,
           'Cerrar',
