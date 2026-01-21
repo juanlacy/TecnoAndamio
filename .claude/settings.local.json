@@ -12,7 +12,16 @@
       "Bash(git commit:*)",
       "Bash(ls:*)",
       "Bash(npm run build:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npm start)",
+      "Bash(find:*)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(node generar-password-hash.js:*)",
+      "Bash(del CREAR_USUARIO_DEMO.sql)",
+      "Bash(jq:*)",
+      "Bash(python:*)"
     ]
   }
 }
