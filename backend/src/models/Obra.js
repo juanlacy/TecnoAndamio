@@ -10,6 +10,12 @@ const Obra = (sequelize) => {
         autoIncrement: true,
         allowNull: false,
       },
+      codigo: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+        comment: 'Código único de la obra',
+      },
       cliente_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -24,9 +30,19 @@ const Obra = (sequelize) => {
         type: DataTypes.STRING(150),
         allowNull: false,
       },
+      descripcion: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        comment: 'Descripción detallada de la obra',
+      },
       direccion: {
         type: DataTypes.STRING(200),
         allowNull: true,
+      },
+      ciudad: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        comment: 'Ciudad donde se ubica la obra',
       },
       region: {
         type: DataTypes.STRING(50),
@@ -43,6 +59,22 @@ const Obra = (sequelize) => {
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         comment: 'Usuario responsable de la obra',
+      },
+      fecha_inicio: {
+        type: DataTypes.DATEONLY,
+        allowNull: false,
+        comment: 'Fecha de inicio de la obra',
+      },
+      fecha_termino_estimada: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+        comment: 'Fecha estimada de término de la obra',
+      },
+      estado: {
+        type: DataTypes.ENUM('planificacion', 'en_curso', 'suspendida', 'finalizada'),
+        allowNull: false,
+        defaultValue: 'planificacion',
+        comment: 'Estado actual de la obra',
       },
       activa: {
         type: DataTypes.BOOLEAN,

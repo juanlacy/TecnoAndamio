@@ -110,22 +110,24 @@ export const getObraById = async (id) => {
 export const createObra = async (obraData) => {
   try {
     const {
+      codigo,
       cliente_id,
       nombre,
+      descripcion,
       direccion,
+      ciudad,
       region,
-      // ciudad, // TODO: Agregar columna a la BD
-      // descripcion, // TODO: Agregar columna a la BD
       responsable_id,
-      // fecha_inicio, // TODO: Agregar columna a la BD
-      // fecha_termino, // TODO: Agregar columna a la BD
-      activa,
+      fecha_inicio,
+      fecha_termino_estimada,
+      estado,
+      activo,
     } = obraData;
 
     // Verificar que el cliente existe
     const cliente = await Cliente.findByPk(cliente_id);
     if (!cliente) {
-      throw new AppError('Cliente no encontrada', 404);
+      throw new AppError('Cliente no encontrado', 404);
     }
 
     // Verificar que el usuario responsable existe (si se proporciona)
@@ -136,18 +138,27 @@ export const createObra = async (obraData) => {
       }
     }
 
+    // Validar rango de fechas si ambas están presentes
+    if (fecha_termino_estimada && fecha_inicio) {
+      if (new Date(fecha_termino_estimada) < new Date(fecha_inicio)) {
+        throw new AppError('La fecha de término debe ser posterior a la fecha de inicio', 400);
+      }
+    }
+
     // Crear obra
     const obra = await Obra.create({
+      codigo,
       cliente_id,
       nombre,
+      descripcion,
       direccion,
+      ciudad,
       region,
-      // ciudad, // TODO: Agregar columna a la BD
-      // descripcion, // TODO: Agregar columna a la BD
       responsable_id,
-      // fecha_inicio, // TODO: Agregar columna a la BD
-      // fecha_termino, // TODO: Agregar columna a la BD
-      activa: activa !== undefined ? activa : true,
+      fecha_inicio,
+      fecha_termino_estimada,
+      estado: estado || 'planificacion',
+      activa: activo !== undefined ? activo : true,
     });
 
     // Recargar con relaciones
@@ -185,15 +196,17 @@ export const updateObra = async (id, obraData) => {
     }
 
     const {
+      codigo,
       nombre,
+      descripcion,
       direccion,
+      ciudad,
       region,
-      // ciudad, // TODO: Agregar columna a la BD
-      // descripcion, // TODO: Agregar columna a la BD
       responsable_id,
-      // fecha_inicio, // TODO: Agregar columna a la BD
-      // fecha_termino, // TODO: Agregar columna a la BD
-      activa,
+      fecha_inicio,
+      fecha_termino_estimada,
+      estado,
+      activo,
     } = obraData;
 
     // Verificar que el usuario responsable existe (si se proporciona)
@@ -204,22 +217,26 @@ export const updateObra = async (id, obraData) => {
       }
     }
 
-    // TODO: Validar que fecha_termino sea posterior a fecha_inicio si ambas están presentes
-    // const nuevaFechaInicio = fecha_inicio || obra.fecha_inicio;
-    // if (fecha_termino && nuevaFechaInicio && new Date(fecha_termino) <= new Date(nuevaFechaInicio)) {
-    //   throw new AppError('Fecha de término debe ser posterior a fecha de inicio', 400);
-    // }
+    // Validar rango de fechas
+    const nuevaFechaInicio = fecha_inicio || obra.fecha_inicio;
+    const nuevaFechaTermino = fecha_termino_estimada !== undefined ? fecha_termino_estimada : obra.fecha_termino_estimada;
+
+    if (nuevaFechaTermino && nuevaFechaInicio && new Date(nuevaFechaTermino) < new Date(nuevaFechaInicio)) {
+      throw new AppError('La fecha de término debe ser posterior a la fecha de inicio', 400);
+    }
 
     // Actualizar campos
+    if (codigo !== undefined) obra.codigo = codigo;
     if (nombre !== undefined) obra.nombre = nombre;
+    if (descripcion !== undefined) obra.descripcion = descripcion;
     if (direccion !== undefined) obra.direccion = direccion;
+    if (ciudad !== undefined) obra.ciudad = ciudad;
     if (region !== undefined) obra.region = region;
-    // if (ciudad !== undefined) obra.ciudad = ciudad; // TODO: Agregar columna a la BD
-    // if (descripcion !== undefined) obra.descripcion = descripcion; // TODO: Agregar columna a la BD
     if (responsable_id !== undefined) obra.responsable_id = responsable_id;
-    // if (fecha_inicio !== undefined) obra.fecha_inicio = fecha_inicio; // TODO: Agregar columna a la BD
-    // if (fecha_termino !== undefined) obra.fecha_termino = fecha_termino; // TODO: Agregar columna a la BD
-    if (activa !== undefined) obra.activa = activa;
+    if (fecha_inicio !== undefined) obra.fecha_inicio = fecha_inicio;
+    if (fecha_termino_estimada !== undefined) obra.fecha_termino_estimada = fecha_termino_estimada;
+    if (estado !== undefined) obra.estado = estado;
+    if (activo !== undefined) obra.activa = activo;
 
     await obra.save();
 

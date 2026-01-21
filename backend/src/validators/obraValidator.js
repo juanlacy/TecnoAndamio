@@ -8,6 +8,15 @@ import Joi from 'joi';
  * Schema para crear obra
  */
 export const createObraSchema = Joi.object({
+  codigo: Joi.string()
+    .min(3)
+    .max(50)
+    .required()
+    .messages({
+      'string.min': 'Código debe tener al menos 3 caracteres',
+      'string.max': 'Código no puede exceder 50 caracteres',
+      'any.required': 'Código es requerido',
+    }),
   cliente_id: Joi.number()
     .integer()
     .positive()
@@ -25,19 +34,15 @@ export const createObraSchema = Joi.object({
       'string.max': 'Nombre no puede exceder 150 caracteres',
       'any.required': 'Nombre es requerido',
     }),
+  descripcion: Joi.string()
+    .optional()
+    .allow(''),
   direccion: Joi.string()
     .max(255)
     .required()
     .messages({
       'string.max': 'Dirección no puede exceder 255 caracteres',
       'any.required': 'Dirección es requerida',
-    }),
-  region: Joi.string()
-    .max(50)
-    .optional()
-    .allow('')
-    .messages({
-      'string.max': 'Región no puede exceder 50 caracteres',
     }),
   ciudad: Joi.string()
     .max(100)
@@ -46,9 +51,13 @@ export const createObraSchema = Joi.object({
     .messages({
       'string.max': 'Ciudad no puede exceder 100 caracteres',
     }),
-  descripcion: Joi.string()
+  region: Joi.string()
+    .max(50)
     .optional()
-    .allow(''),
+    .allow('')
+    .messages({
+      'string.max': 'Región no puede exceder 50 caracteres',
+    }),
   responsable_id: Joi.number()
     .integer()
     .positive()
@@ -62,13 +71,20 @@ export const createObraSchema = Joi.object({
       'any.required': 'Fecha de inicio es requerida',
       'date.base': 'Fecha de inicio debe ser una fecha válida',
     }),
-  fecha_termino: Joi.date()
+  fecha_termino_estimada: Joi.date()
     .optional()
     .greater(Joi.ref('fecha_inicio'))
     .messages({
-      'date.greater': 'Fecha de término debe ser posterior a fecha de inicio',
+      'date.greater': 'Fecha de término estimada debe ser posterior a fecha de inicio',
     }),
-  activa: Joi.boolean()
+  estado: Joi.string()
+    .valid('planificacion', 'en_curso', 'suspendida', 'finalizada')
+    .optional()
+    .default('planificacion')
+    .messages({
+      'any.only': 'Estado debe ser: planificacion, en_curso, suspendida o finalizada',
+    }),
+  activo: Joi.boolean()
     .optional()
     .default(true),
 });
@@ -77,22 +93,26 @@ export const createObraSchema = Joi.object({
  * Schema para actualizar obra
  */
 export const updateObraSchema = Joi.object({
+  codigo: Joi.string()
+    .min(3)
+    .max(50)
+    .optional(),
   nombre: Joi.string()
     .min(3)
     .max(150)
     .optional(),
+  descripcion: Joi.string()
+    .optional()
+    .allow(''),
   direccion: Joi.string()
     .max(255)
     .optional(),
-  region: Joi.string()
-    .max(50)
-    .optional()
-    .allow(''),
   ciudad: Joi.string()
     .max(100)
     .optional()
     .allow(''),
-  descripcion: Joi.string()
+  region: Joi.string()
+    .max(50)
     .optional()
     .allow(''),
   responsable_id: Joi.number()
@@ -102,16 +122,22 @@ export const updateObraSchema = Joi.object({
     .allow(null),
   fecha_inicio: Joi.date()
     .optional(),
-  fecha_termino: Joi.date()
+  fecha_termino_estimada: Joi.date()
     .optional()
     .when('fecha_inicio', {
       is: Joi.exist(),
       then: Joi.date().greater(Joi.ref('fecha_inicio')),
     })
     .messages({
-      'date.greater': 'Fecha de término debe ser posterior a fecha de inicio',
+      'date.greater': 'Fecha de término estimada debe ser posterior a fecha de inicio',
     }),
-  activa: Joi.boolean()
+  estado: Joi.string()
+    .valid('planificacion', 'en_curso', 'suspendida', 'finalizada')
+    .optional()
+    .messages({
+      'any.only': 'Estado debe ser: planificacion, en_curso, suspendida o finalizada',
+    }),
+  activo: Joi.boolean()
     .optional(),
 });
 
