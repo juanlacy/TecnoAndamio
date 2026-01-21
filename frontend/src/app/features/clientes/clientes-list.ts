@@ -46,7 +46,7 @@ export class ClientesList implements OnInit {
   loading = signal(true);
   searchTerm = signal('');
 
-  displayedColumns: string[] = ['rut', 'nombre', 'email', 'telefono', 'activo', 'acciones'];
+  displayedColumns: string[] = ['rut', 'empresa', 'rubro', 'correo_empresa', 'activo', 'acciones'];
 
   ngOnInit(): void {
     this.loadClientes();
@@ -86,7 +86,7 @@ export class ClientesList implements OnInit {
   onDelete(cliente: Cliente): void {
     const dialogData: ConfirmDialogData = {
       title: 'Eliminar Cliente',
-      message: `¿Está seguro que desea eliminar al cliente "${cliente.razon_social}"? Esta acción no se puede deshacer.`,
+      message: `¿Está seguro que desea eliminar al cliente "${cliente.empresa}"? Esta acción no se puede deshacer.`,
       confirmText: 'Eliminar',
       cancelText: 'Cancelar',
       confirmColor: 'warn'

@@ -38,35 +38,35 @@
             <mat-hint>Ingrese el RUT sin puntos ni guión, se formateará automáticamente</mat-hint>
           </mat-form-field>
 
-          <!-- Razón Social -->
+          <!-- Empresa -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Razón Social</mat-label>
+            <mat-label>Empresa</mat-label>
             <input
               matInput
-              formControlName="razon_social"
+              formControlName="empresa"
               placeholder="Empresa Constructora S.A."
-              [class.invalid]="clienteForm.get('razon_social')?.invalid && clienteForm.get('razon_social')?.touched"
+              [class.invalid]="clienteForm.get('empresa')?.invalid && clienteForm.get('empresa')?.touched"
             >
             <mat-icon matSuffix>business</mat-icon>
-            @if (clienteForm.get('razon_social')?.invalid && clienteForm.get('razon_social')?.touched) {
-              <mat-error>{{ getErrorMessage('razon_social') }}</mat-error>
+            @if (clienteForm.get('empresa')?.invalid && clienteForm.get('empresa')?.touched) {
+              <mat-error>{{ getErrorMessage('empresa') }}</mat-error>
             }
           </mat-form-field>
 
-          <!-- Nombre Fantasía -->
+          <!-- Rubro -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nombre Fantasía</mat-label>
+            <mat-label>Rubro</mat-label>
             <input
               matInput
-              formControlName="nombre_fantasia"
-              placeholder="Constructora XYZ"
-              [class.invalid]="clienteForm.get('nombre_fantasia')?.invalid && clienteForm.get('nombre_fantasia')?.touched"
+              formControlName="rubro"
+              placeholder="Construcción, Inmobiliario, etc."
+              [class.invalid]="clienteForm.get('rubro')?.invalid && clienteForm.get('rubro')?.touched"
             >
-            <mat-icon matSuffix>store</mat-icon>
-            @if (clienteForm.get('nombre_fantasia')?.invalid && clienteForm.get('nombre_fantasia')?.touched) {
-              <mat-error>{{ getErrorMessage('nombre_fantasia') }}</mat-error>
+            <mat-icon matSuffix>category</mat-icon>
+            @if (clienteForm.get('rubro')?.invalid && clienteForm.get('rubro')?.touched) {
+              <mat-error>{{ getErrorMessage('rubro') }}</mat-error>
             }
-            <mat-hint>Opcional - Nombre comercial del cliente</mat-hint>
+            <mat-hint>Opcional - Sector o rubro de la empresa</mat-hint>
           </mat-form-field>
           </div>
 
@@ -77,38 +77,21 @@
               Información de Contacto
             </h3>
 
-          <!-- Email -->
+          <!-- Email Empresa -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Email</mat-label>
+            <mat-label>Email Empresa</mat-label>
             <input
               matInput
               type="email"
-              formControlName="email"
-              placeholder="cliente@ejemplo.com"
-              [class.invalid]="clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched"
+              formControlName="correo_empresa"
+              placeholder="contacto@empresa.com"
+              [class.invalid]="clienteForm.get('correo_empresa')?.invalid && clienteForm.get('correo_empresa')?.touched"
             >
             <mat-icon matSuffix>email</mat-icon>
-            @if (clienteForm.get('email')?.invalid && clienteForm.get('email')?.touched) {
-              <mat-error>{{ getErrorMessage('email') }}</mat-error>
+            @if (clienteForm.get('correo_empresa')?.invalid && clienteForm.get('correo_empresa')?.touched) {
+              <mat-error>{{ getErrorMessage('correo_empresa') }}</mat-error>
             }
-            <mat-hint>Opcional</mat-hint>
-          </mat-form-field>
-
-          <!-- Teléfono -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Teléfono</mat-label>
-            <input
-              matInput
-              type="tel"
-              formControlName="telefono"
-              placeholder="+56912345678"
-              [class.invalid]="clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched"
-            >
-            <mat-icon matSuffix>phone</mat-icon>
-            @if (clienteForm.get('telefono')?.invalid && clienteForm.get('telefono')?.touched) {
-              <mat-error>{{ getErrorMessage('telefono') }}</mat-error>
-            }
-            <mat-hint>Opcional - Formato: +56912345678</mat-hint>
+            <mat-hint>Opcional - Email de contacto de la empresa</mat-hint>
           </mat-form-field>
 
           <!-- Dirección -->

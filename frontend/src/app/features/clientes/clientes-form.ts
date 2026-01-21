@@ -52,11 +52,11 @@ export class ClientesForm implements OnInit {
   private initForm(): void {
     this.clienteForm = this.fb.group({
       rut: ['', [Validators.required, this.rutValidator.bind(this)]],
-      razon_social: ['', [Validators.required, Validators.minLength(3)]],
-      nombre_fantasia: [''],
-      email: ['', [Validators.email]],
-      telefono: ['', [Validators.pattern(/^[+]?[0-9]{8,15}$/)]],
+      empresa: ['', [Validators.required, Validators.minLength(3)]],
       direccion: [''],
+      rubro: [''],
+      correo_empresa: ['', [Validators.email]],
+      usuario_responsable_id: [null],
       activo: [true]
     });
   }

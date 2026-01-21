@@ -53,30 +53,27 @@
               </td>
             </ng-container>
 
-            <!-- Nombre Column -->
-            <ng-container matColumnDef="nombre">
-              <th mat-header-cell *matHeaderCellDef>Razón Social</th>
+            <!-- Empresa Column -->
+            <ng-container matColumnDef="empresa">
+              <th mat-header-cell *matHeaderCellDef>Empresa</th>
               <td mat-cell *matCellDef="let cliente">
-                {{ cliente.razon_social }}
-                @if (cliente.nombre_fantasia) {
-                  <br><small style="color: rgba(0, 0, 0, 0.6);">({{ cliente.nombre_fantasia }})</small>
-                }
+                {{ cliente.empresa }}
               </td>
             </ng-container>
 
-            <!-- Email Column -->
-            <ng-container matColumnDef="email">
+            <!-- Rubro Column -->
+            <ng-container matColumnDef="rubro">
+              <th mat-header-cell *matHeaderCellDef>Rubro</th>
+              <td mat-cell *matCellDef="let cliente">
+                {{ cliente.rubro || '-' }}
+              </td>
+            </ng-container>
+
+            <!-- Email Empresa Column -->
+            <ng-container matColumnDef="correo_empresa">
               <th mat-header-cell *matHeaderCellDef>Email</th>
               <td mat-cell *matCellDef="let cliente">
-                {{ cliente.email || '-' }}
-              </td>
-            </ng-container>
-
-            <!-- Teléfono Column -->
-            <ng-container matColumnDef="telefono">
-              <th mat-header-cell *matHeaderCellDef>Teléfono</th>
-              <td mat-cell *matCellDef="let cliente">
-                {{ cliente.telefono || '-' }}
+                {{ cliente.correo_empresa || '-' }}
               </td>
             </ng-container>
 

@@ -5,12 +5,12 @@ import { Cliente } from '../../core/models';
 import { ApiResponse, PaginatedResponse } from '../../core/models';
 
 export interface ClienteCreateRequest {
+  empresa: string;
   rut: string;
-  razon_social: string;
-  nombre_fantasia?: string;
-  email?: string;
-  telefono?: string;
   direccion?: string;
+  rubro?: string;
+  correo_empresa?: string;
+  usuario_responsable_id?: number;
   activo?: boolean;
 }
 

@@ -35,7 +35,7 @@
                 @for (cliente of clientesActivos(); track cliente.id) {
                   <mat-option [value]="cliente.id">
                     <div class="cliente-option">
-                      <strong>{{ cliente.razon_social }}</strong>
+                      <strong>{{ cliente.empresa }}</strong>
                       <small>{{ cliente.rut | rutFormat }}</small>
                     </div>
                   </mat-option>

@@ -1,15 +1,20 @@
 export interface Cliente {
   id: number;
+  empresa: string;
   rut: string;
-  razon_social: string;
-  nombre_fantasia?: string;
   direccion?: string;
-  telefono?: string;
-  email?: string;
+  rubro?: string;
+  correo_empresa?: string;
+  usuario_responsable_id?: number;
   activo: boolean;
   created_at?: string;
   updated_at?: string;
   contactos?: Contacto[];
+  responsable?: {
+    id: number;
+    nombre: string;
+    email: string;
+  };
 }
 
 export interface Contacto {

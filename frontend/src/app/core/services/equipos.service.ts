@@ -15,41 +15,41 @@ export class EquiposService {
    * Obtener todos los equipos
    */
   getAll(): Observable<ApiResponse<Equipo[]>> {
-    return this.apiService.get<Equipo[]>(this.baseUrl);
+    return this.apiService.get<ApiResponse<Equipo[]>>(this.baseUrl);
   }
 
   /**
    * Obtener equipo por ID
    */
   getById(id: number): Observable<ApiResponse<Equipo>> {
-    return this.apiService.get<Equipo>(`${this.baseUrl}/${id}`);
+    return this.apiService.get<ApiResponse<Equipo>>(`${this.baseUrl}/${id}`);
   }
 
   /**
    * Crear nuevo equipo
    */
   create(equipo: CreateEquipoDto): Observable<ApiResponse<Equipo>> {
-    return this.apiService.post<Equipo>(this.baseUrl, equipo);
+    return this.apiService.post<ApiResponse<Equipo>>(this.baseUrl, equipo);
   }
 
   /**
    * Actualizar equipo
    */
   update(id: number, equipo: UpdateEquipoDto): Observable<ApiResponse<Equipo>> {
-    return this.apiService.put<Equipo>(`${this.baseUrl}/${id}`, equipo);
+    return this.apiService.put<ApiResponse<Equipo>>(`${this.baseUrl}/${id}`, equipo);
   }
 
   /**
    * Eliminar equipo (soft delete)
    */
   delete(id: number): Observable<ApiResponse<void>> {
-    return this.apiService.delete<void>(`${this.baseUrl}/${id}`);
+    return this.apiService.delete<ApiResponse<void>>(`${this.baseUrl}/${id}`);
   }
 
   /**
    * Obtener componentes de un equipo
    */
   getComponentes(equipoId: number): Observable<ApiResponse<any[]>> {
-    return this.apiService.get<any[]>(`${this.baseUrl}/${equipoId}/componentes`);
+    return this.apiService.get<ApiResponse<any[]>>(`${this.baseUrl}/${equipoId}/componentes`);
   }
 }

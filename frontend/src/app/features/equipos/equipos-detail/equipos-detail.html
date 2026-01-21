@@ -1,0 +1,136 @@
+<div class="detail-container">
+  @if (loading()) {
+    <app-loading />
+  } @else if (equipo()) {
+    <!-- Header -->
+    <div class="page-header">
+      <button mat-icon-button (click)="onBack()" class="back-btn">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-content">
+        <h1>
+          <mat-icon>construction</mat-icon>
+          {{ equipo()!.nombre }}
+        </h1>
+        <button mat-raised-button color="primary" (click)="onEdit()">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+      </div>
+    </div>
+
+    <!-- Información Principal -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>Información General</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">
+              <mat-icon>qr_code</mat-icon>
+              Código
+            </span>
+            <span class="value">{{ equipo()!.codigo || 'N/A' }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">
+              <mat-icon>category</mat-icon>
+              Categoría
+            </span>
+            <span class="value">
+              @if (equipo()!.categoria) {
+                {{ equipo()!.categoria!.nombre }}
+              } @else {
+                N/A
+              }
+            </span>
+          </div>
+
+          <div class="info-item full-width">
+            <span class="label">
+              <mat-icon>description</mat-icon>
+              Descripción
+            </span>
+            <span class="value">{{ equipo()!.descripcion || 'Sin descripción' }}</span>
+          </div>
+
+          <div class="info-item full-width">
+            <span class="label">
+              <mat-icon>settings</mat-icon>
+              Especificaciones Técnicas
+            </span>
+            <pre class="value specs">{{ getEspecificacionesDisplay() }}</pre>
+          </div>
+
+          <div class="info-item">
+            <span class="label">
+              <mat-icon>inventory_2</mat-icon>
+              Disponibilidad
+            </span>
+            <span class="value">
+              @if (equipo()!.disponible) {
+                <mat-chip color="primary">Disponible</mat-chip>
+              } @else {
+                <mat-chip color="warn">No disponible</mat-chip>
+              }
+            </span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">
+              <mat-icon>power_settings_new</mat-icon>
+              Estado
+            </span>
+            <span class="value">
+              @if (equipo()!.activo) {
+                <mat-chip color="accent">Activo</mat-chip>
+              } @else {
+                <mat-chip>Inactivo</mat-chip>
+              }
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Componentes -->
+    @if (componentes().length > 0) {
+      <mat-card class="components-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>build_circle</mat-icon>
+            Componentes del Equipo
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="componentes()" class="components-table">
+            <!-- Nombre -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Componente</th>
+              <td mat-cell *matCellDef="let componente">{{ componente.nombre }}</td>
+            </ng-container>
+
+            <!-- Unidad -->
+            <ng-container matColumnDef="unidad">
+              <th mat-header-cell *matHeaderCellDef>Unidad</th>
+              <td mat-cell *matCellDef="let componente">{{ componente.unidad }}</td>
+            </ng-container>
+
+            <!-- Precio -->
+            <ng-container matColumnDef="precio_unitario_uf">
+              <th mat-header-cell *matHeaderCellDef>Precio (UF)</th>
+              <td mat-cell *matCellDef="let componente">
+                {{ componente.precio_unitario_uf | number:'1.4-4' }} UF
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+</div>

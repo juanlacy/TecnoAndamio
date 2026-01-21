@@ -23,9 +23,9 @@
           <div class="client-name">
             <mat-icon>business</mat-icon>
             <div>
-              <h2>{{ clienteData.razon_social }}</h2>
-              @if (clienteData.nombre_fantasia) {
-                <p class="subtitle">{{ clienteData.nombre_fantasia }}</p>
+              <h2>{{ clienteData.empresa }}</h2>
+              @if (clienteData.rubro) {
+                <p class="subtitle">{{ clienteData.rubro }}</p>
               }
             </div>
           </div>
@@ -46,22 +46,13 @@
             <div class="info-value">{{ clienteData.rut | rutFormat }}</div>
           </div>
 
-          <!-- Email -->
+          <!-- Email Empresa -->
           <div class="info-item">
             <div class="info-label">
               <mat-icon>email</mat-icon>
-              <span>Email</span>
+              <span>Email Empresa</span>
             </div>
-            <div class="info-value">{{ clienteData.email || 'No registrado' }}</div>
-          </div>
-
-          <!-- Teléfono -->
-          <div class="info-item">
-            <div class="info-label">
-              <mat-icon>phone</mat-icon>
-              <span>Teléfono</span>
-            </div>
-            <div class="info-value">{{ clienteData.telefono || 'No registrado' }}</div>
+            <div class="info-value">{{ clienteData.correo_empresa || 'No registrado' }}</div>
           </div>
 
           <!-- Dirección -->

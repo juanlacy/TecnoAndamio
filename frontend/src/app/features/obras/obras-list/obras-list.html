@@ -26,7 +26,7 @@
             <mat-option [value]="null">Todos</mat-option>
             @for (cliente of clientesActivos(); track cliente.id) {
               <mat-option [value]="cliente.id">
-                {{ cliente.razon_social }}
+                {{ cliente.empresa }}
               </mat-option>
             }
           </mat-select>

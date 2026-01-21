@@ -21,7 +21,13 @@
       "Bash(node generar-password-hash.js:*)",
       "Bash(del CREAR_USUARIO_DEMO.sql)",
       "Bash(jq:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(npm run db:schema:*)",
+      "Bash(npm run migrate:*)",
+      "Bash(npm run migrate:undo:*)",
+      "Bash(npx sequelize-cli:*)",
+      "Bash(node -e:*)",
+      "Bash(xargs:*)"
     ]
   }
 }
