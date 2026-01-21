@@ -41,6 +41,9 @@ const limiter = rateLimit({
   message: 'Demasiadas solicitudes desde esta IP, por favor intente más tarde.',
   standardHeaders: true,
   legacyHeaders: false,
+  // Configuración para proxies: usar el número de proxies confiables
+  // En producción con nginx, típicamente es 1
+  validate: { trustProxy: false }, // Deshabilitar validación estricta para proxies
 });
 app.use('/api/', limiter);
 
