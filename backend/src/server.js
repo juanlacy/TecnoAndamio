@@ -13,6 +13,10 @@ import requestLogger from './middlewares/requestLogger.js';
 
 const app = express();
 
+// Trust proxy - Necesario cuando se ejecuta detrás de nginx/reverse proxy
+// Permite que Express confíe en headers como X-Forwarded-For
+app.set('trust proxy', true);
+
 // ======================
 // MIDDLEWARES DE SEGURIDAD
 // ======================
