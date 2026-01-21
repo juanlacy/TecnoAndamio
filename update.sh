@@ -50,7 +50,7 @@ fi
 
 # Reiniciar PM2
 echo "   - Reiniciando proceso PM2..."
-pm2 restart tecnoandamio-backend
+pm2 restart tecnoandamio_api
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}   ✓ Backend reiniciado${NC}"
 else
