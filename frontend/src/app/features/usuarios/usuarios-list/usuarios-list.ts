@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -12,11 +12,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 
 import { UsuariosService } from '../../../core/services/usuarios.service';
 import { Usuario } from '../../../core/models/usuario.model';
 import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm-dialog';
+import { ChangePasswordDialog } from '../change-password-dialog/change-password-dialog';
 
 @Component({
   selector: 'app-usuarios-list',
@@ -34,7 +36,8 @@ import { ConfirmDialog } from '../../../shared/components/confirm-dialog/confirm
     MatTooltipModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatButtonToggleModule
   ],
   templateUrl: './usuarios-list.html',
   styleUrl: './usuarios-list.scss'
@@ -49,6 +52,36 @@ export class UsuariosListComponent implements OnInit {
   dataSource = new MatTableDataSource<Usuario>([]);
   loading = signal(false);
   searchTerm = signal('');
+  viewMode = signal<'cards' | 'table'>('cards');
+  selectedRole = signal<string>('');
+  showOnlyActive = signal(false);
+
+  filteredUsuarios = computed(() => {
+    let filtered = this.usuarios();
+
+    // Filtrar por término de búsqueda
+    if (this.searchTerm()) {
+      const term = this.searchTerm().toLowerCase();
+      filtered = filtered.filter(usuario =>
+        usuario.nombre.toLowerCase().includes(term) ||
+        usuario.email.toLowerCase().includes(term) ||
+        (usuario.rol && usuario.rol.toLowerCase().includes(term)) ||
+        (usuario.roles && usuario.roles.some(r => r.toLowerCase().includes(term)))
+      );
+    }
+
+    // Filtrar por rol
+    if (this.selectedRole()) {
+      filtered = filtered.filter(usuario => usuario.rol === this.selectedRole());
+    }
+
+    // Filtrar por activos
+    if (this.showOnlyActive()) {
+      filtered = filtered.filter(usuario => usuario.activo);
+    }
+
+    return filtered;
+  });
 
   displayedColumns: string[] = ['id', 'nombre', 'email', 'rol', 'activo', 'actions'];
 
@@ -75,19 +108,7 @@ export class UsuariosListComponent implements OnInit {
   onSearch(event: Event): void {
     const term = (event.target as HTMLInputElement).value.toLowerCase();
     this.searchTerm.set(term);
-
-    if (!term) {
-      this.dataSource.data = this.usuarios();
-      return;
-    }
-
-    const filtered = this.usuarios().filter(usuario =>
-      usuario.nombre.toLowerCase().includes(term) ||
-      usuario.email.toLowerCase().includes(term) ||
-      (usuario.rol && usuario.rol.toLowerCase().includes(term)) ||
-      (usuario.roles && usuario.roles.some(r => r.toLowerCase().includes(term)))
-    );
-    this.dataSource.data = filtered;
+    this.updateDataSource();
   }
 
   onCreate(): void {
@@ -146,6 +167,23 @@ export class UsuariosListComponent implements OnInit {
     });
   }
 
+  onChangePassword(usuario: Usuario): void {
+    const dialogRef = this.dialog.open(ChangePasswordDialog, {
+      width: '500px',
+      data: {
+        usuarioId: usuario.id,
+        usuarioNombre: usuario.nombre
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // La contraseña se cambió exitosamente
+        // El snackbar ya se mostró en el diálogo
+      }
+    });
+  }
+
   getRolColor(rol: string): string {
     switch (rol) {
       case 'admin':
@@ -168,11 +206,29 @@ export class UsuariosListComponent implements OnInit {
     }
   }
 
+  onViewModeChange(event: any): void {
+    this.viewMode.set(event.value);
+  }
+
+  filterByRole(role: string): void {
+    this.selectedRole.set(role);
+    this.updateDataSource();
+  }
+
+  filterByActive(active: boolean): void {
+    this.showOnlyActive.set(active);
+    this.updateDataSource();
+  }
+
+  private updateDataSource(): void {
+    this.dataSource.data = this.filteredUsuarios();
+  }
+
   get hasData(): boolean {
-    return this.dataSource.data.length > 0;
+    return this.filteredUsuarios().length > 0;
   }
 
   get totalUsuarios(): number {
-    return this.dataSource.data.length;
+    return this.usuarios().length;
   }
 }

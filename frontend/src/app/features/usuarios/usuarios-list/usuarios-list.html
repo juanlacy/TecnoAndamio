@@ -1,18 +1,37 @@
-<div class="usuarios-container">
-  <div class="header">
-    <h1>
-      <mat-icon>people</mat-icon>
-      Gestión de Usuarios
-    </h1>
-    <button mat-raised-button color="primary" (click)="onCreate()">
-      <mat-icon>person_add</mat-icon>
-      Nuevo Usuario
-    </button>
+<div class="usuarios-container-modern">
+  <!-- Header con toggle de vista -->
+  <div class="header-modern">
+    <div class="header-left">
+      <div class="title-section">
+        <mat-icon class="header-icon">people</mat-icon>
+        <div>
+          <h1>Gestión de Usuarios</h1>
+          <p class="subtitle">Administra los usuarios del sistema</p>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <mat-button-toggle-group [value]="viewMode()" (change)="onViewModeChange($event)">
+        <mat-button-toggle value="cards">
+          <mat-icon>grid_view</mat-icon>
+          <span class="toggle-label">Tarjetas</span>
+        </mat-button-toggle>
+        <mat-button-toggle value="table">
+          <mat-icon>view_list</mat-icon>
+          <span class="toggle-label">Lista</span>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <button mat-raised-button color="primary" (click)="onCreate()" class="create-btn">
+        <mat-icon>person_add</mat-icon>
+        Nuevo Usuario
+      </button>
+    </div>
   </div>
 
-  <mat-card class="search-card">
-    <mat-card-content>
-      <mat-form-field appearance="outline" class="search-field">
+  <!-- Búsqueda y filtros -->
+  <mat-card class="search-card-modern">
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-field-modern">
         <mat-label>Buscar usuarios</mat-label>
         <input
           matInput
@@ -23,44 +42,146 @@
         />
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
-    </mat-card-content>
+
+      <div class="filter-chips">
+        <mat-chip-set>
+          <mat-chip-option (click)="filterByRole('')" [selected]="selectedRole() === ''">
+            <mat-icon>people</mat-icon>
+            Todos ({{ totalUsuarios }})
+          </mat-chip-option>
+          <mat-chip-option (click)="filterByRole('admin')" [selected]="selectedRole() === 'admin'">
+            <mat-icon>admin_panel_settings</mat-icon>
+            Administradores
+          </mat-chip-option>
+          <mat-chip-option (click)="filterByRole('usuario')" [selected]="selectedRole() === 'usuario'">
+            <mat-icon>person</mat-icon>
+            Usuarios
+          </mat-chip-option>
+          <mat-chip-option (click)="filterByActive(!showOnlyActive())" [selected]="showOnlyActive()">
+            <mat-icon>check_circle</mat-icon>
+            Solo Activos
+          </mat-chip-option>
+        </mat-chip-set>
+      </div>
+    </div>
   </mat-card>
 
-  <mat-card class="table-card">
-    <mat-card-content>
-      @if (loading()) {
-        <div class="loading-container">
-          <mat-spinner diameter="50"></mat-spinner>
-          <p>Cargando usuarios...</p>
-        </div>
-      } @else if (!hasData) {
-        <div class="empty-state">
-          <mat-icon>people_outline</mat-icon>
-          <h2>No se encontraron usuarios</h2>
-          <p>{{ searchTerm() ? 'Intenta con otro término de búsqueda' : 'Comienza creando un nuevo usuario' }}</p>
-          @if (!searchTerm()) {
-            <button mat-raised-button color="primary" (click)="onCreate()">
-              <mat-icon>person_add</mat-icon>
-              Crear Primer Usuario
-            </button>
-          }
-        </div>
-      } @else {
-        <div class="table-container">
-          <table mat-table [dataSource]="dataSource" class="usuarios-table">
+  @if (loading()) {
+    <div class="loading-container-modern">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p>Cargando usuarios...</p>
+    </div>
+  } @else if (!hasData) {
+    <div class="empty-state-modern">
+      <mat-icon>people_outline</mat-icon>
+      <h2>No se encontraron usuarios</h2>
+      <p>{{ searchTerm() ? 'Intenta con otro término de búsqueda' : 'Comienza creando un nuevo usuario' }}</p>
+      @if (!searchTerm()) {
+        <button mat-raised-button color="primary" (click)="onCreate()">
+          <mat-icon>person_add</mat-icon>
+          Crear Primer Usuario
+        </button>
+      }
+    </div>
+  } @else {
+    <!-- Vista de Tarjetas -->
+    @if (viewMode() === 'cards') {
+      <div class="cards-grid">
+        @for (usuario of filteredUsuarios(); track usuario.id) {
+          <mat-card class="user-card" [class.inactive-card]="!usuario.activo">
+            <mat-card-header>
+              <div class="card-header-content">
+                <div class="avatar-section">
+                  <div class="avatar" [class.admin-avatar]="usuario.rol === 'admin'">
+                    <mat-icon>{{ usuario.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+                  </div>
+                  <div class="user-basic-info">
+                    <h3>{{ usuario.nombre }}</h3>
+                    <p class="user-email">{{ usuario.email }}</p>
+                  </div>
+                </div>
+                <div class="card-badges">
+                  <mat-chip [class.chip-admin]="usuario.rol === 'admin'" [class.chip-user]="usuario.rol === 'usuario'">
+                    {{ getRolLabel(usuario.rol || '') }}
+                  </mat-chip>
+                  <mat-chip [class.chip-active]="usuario.activo" [class.chip-inactive]="!usuario.activo">
+                    <mat-icon>{{ usuario.activo ? 'check_circle' : 'cancel' }}</mat-icon>
+                    {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+                  </mat-chip>
+                </div>
+              </div>
+            </mat-card-header>
+
+            <mat-card-content>
+              <div class="card-info">
+                <div class="info-row">
+                  <mat-icon class="info-icon">fingerprint</mat-icon>
+                  <span class="info-label">ID:</span>
+                  <span class="info-value">#{{ usuario.id }}</span>
+                </div>
+                @if (usuario.created_at) {
+                  <div class="info-row">
+                    <mat-icon class="info-icon">event</mat-icon>
+                    <span class="info-label">Creado:</span>
+                    <span class="info-value">{{ usuario.created_at | date:'dd/MM/yyyy' }}</span>
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+
+            <mat-card-actions>
+              <div class="card-actions">
+                <button mat-button color="primary" (click)="onView(usuario)" matTooltip="Ver detalles">
+                  <mat-icon>visibility</mat-icon>
+                  <span>Ver</span>
+                </button>
+                <button mat-button color="accent" (click)="onEdit(usuario)" matTooltip="Editar">
+                  <mat-icon>edit</mat-icon>
+                  <span>Editar</span>
+                </button>
+                <button mat-button class="password-btn" (click)="onChangePassword(usuario)" matTooltip="Cambiar contraseña">
+                  <mat-icon>vpn_key</mat-icon>
+                  <span>Clave</span>
+                </button>
+                <button mat-button color="warn" (click)="onDelete(usuario)" matTooltip="Eliminar">
+                  <mat-icon>delete</mat-icon>
+                  <span>Eliminar</span>
+                </button>
+              </div>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+
+    <!-- Vista de Tabla -->
+    @if (viewMode() === 'table') {
+      <mat-card class="table-card-modern">
+        <div class="table-container-modern">
+          <table mat-table [dataSource]="dataSource" class="usuarios-table-modern">
             <!-- ID Column -->
             <ng-container matColumnDef="id">
               <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let usuario">#{{ usuario.id }}</td>
+              <td mat-cell *matCellDef="let usuario">
+                <div class="id-cell">
+                  <mat-icon class="id-icon">fingerprint</mat-icon>
+                  #{{ usuario.id }}
+                </div>
+              </td>
             </ng-container>
 
             <!-- Nombre Column -->
             <ng-container matColumnDef="nombre">
-              <th mat-header-cell *matHeaderCellDef>Nombre</th>
+              <th mat-header-cell *matHeaderCellDef>Usuario</th>
               <td mat-cell *matCellDef="let usuario">
-                <div class="user-info">
-                  <mat-icon class="user-avatar">account_circle</mat-icon>
-                  <span>{{ usuario.nombre }}</span>
+                <div class="user-info-cell">
+                  <div class="user-avatar-small" [class.admin-avatar]="usuario.rol === 'admin'">
+                    <mat-icon>{{ usuario.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+                  </div>
+                  <div class="user-details">
+                    <span class="user-name">{{ usuario.nombre }}</span>
+                    <span class="user-email-small">{{ usuario.email }}</span>
+                  </div>
                 </div>
               </td>
             </ng-container>
@@ -69,7 +190,7 @@
             <ng-container matColumnDef="email">
               <th mat-header-cell *matHeaderCellDef>Email</th>
               <td mat-cell *matCellDef="let usuario">
-                <div class="email-cell">
+                <div class="email-cell-modern">
                   <mat-icon>email</mat-icon>
                   {{ usuario.email }}
                 </div>
@@ -80,9 +201,9 @@
             <ng-container matColumnDef="rol">
               <th mat-header-cell *matHeaderCellDef>Rol</th>
               <td mat-cell *matCellDef="let usuario">
-                <mat-chip [color]="getRolColor(usuario.rol)" highlighted>
+                <mat-chip [class.chip-admin]="usuario.rol === 'admin'" [class.chip-user]="usuario.rol === 'usuario'">
                   <mat-icon>{{ usuario.rol === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
-                  {{ getRolLabel(usuario.rol) }}
+                  {{ getRolLabel(usuario.rol || '') }}
                 </mat-chip>
               </td>
             </ng-container>
@@ -92,10 +213,10 @@
               <th mat-header-cell *matHeaderCellDef>Estado</th>
               <td mat-cell *matCellDef="let usuario">
                 <mat-chip
-                  [color]="usuario.activo ? 'primary' : ''"
-                  [highlighted]="usuario.activo"
+                  [class.chip-active]="usuario.activo"
+                  [class.chip-inactive]="!usuario.activo"
                   (click)="onToggleActive(usuario, $event)"
-                  class="status-chip"
+                  class="status-chip-modern"
                   [matTooltip]="usuario.activo ? 'Click para desactivar' : 'Click para activar'"
                 >
                   <mat-icon>{{ usuario.activo ? 'check_circle' : 'cancel' }}</mat-icon>
@@ -108,12 +229,13 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>Acciones</th>
               <td mat-cell *matCellDef="let usuario">
-                <div class="action-buttons">
+                <div class="action-buttons-modern">
                   <button
                     mat-icon-button
                     color="primary"
                     (click)="onView(usuario)"
                     matTooltip="Ver detalles"
+                    class="action-btn"
                   >
                     <mat-icon>visibility</mat-icon>
                   </button>
@@ -122,14 +244,24 @@
                     color="accent"
                     (click)="onEdit(usuario)"
                     matTooltip="Editar"
+                    class="action-btn"
                   >
                     <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    class="password-btn-icon"
+                    (click)="onChangePassword(usuario)"
+                    matTooltip="Cambiar contraseña"
+                  >
+                    <mat-icon>vpn_key</mat-icon>
                   </button>
                   <button
                     mat-icon-button
                     color="warn"
                     (click)="onDelete(usuario)"
                     matTooltip="Eliminar"
+                    class="action-btn"
                   >
                     <mat-icon>delete</mat-icon>
                   </button>
@@ -138,14 +270,17 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row-modern"></tr>
           </table>
         </div>
 
-        <div class="table-footer">
-          <p>Total de usuarios: <strong>{{ totalUsuarios }}</strong></p>
+        <div class="table-footer-modern">
+          <div class="footer-info">
+            <mat-icon>people</mat-icon>
+            <span>Total de usuarios: <strong>{{ totalUsuarios }}</strong></span>
+          </div>
         </div>
-      }
-    </mat-card-content>
-  </mat-card>
+      </mat-card>
+    }
+  }
 </div>
