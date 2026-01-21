@@ -36,8 +36,8 @@ export class UsuariosService {
     return this.apiService.put<ApiResponse<Usuario>>(`${this.endpoint}/${id}`, { activo });
   }
 
-  // Cambiar contraseña
-  changePassword(id: number, newPassword: string): Observable<ApiResponse<void>> {
-    return this.apiService.put<ApiResponse<void>>(`${this.endpoint}/${id}/password`, { password: newPassword });
+  // Cambiar contraseña usando el endpoint de actualización general
+  changePassword(id: number, newPassword: string): Observable<ApiResponse<Usuario>> {
+    return this.apiService.put<ApiResponse<Usuario>>(`${this.endpoint}/${id}`, { password: newPassword });
   }
 }
