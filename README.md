@@ -123,6 +123,7 @@ docker-compose up -d
 - [Arquitectura de Base de Datos](./docs/database/schema.md)
 - [API Documentation](http://localhost:3000/api-docs)
 - [Guía de Desarrollo](./docs/development-guide.md)
+- **[📊 Control de Migraciones](./MIGRACIONES.md)** ← Importante para despliegue a producción
 
 ## 🔧 Desarrollo con Claude Code
 
