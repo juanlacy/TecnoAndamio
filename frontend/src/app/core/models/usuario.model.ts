@@ -2,8 +2,8 @@ export interface Usuario {
   id: number;
   nombre: string;
   email: string;
-  rol?: string;  // 'admin' | 'usuario' - Deprecado, usar roles
-  roles?: string[];  // Array de nombres de roles: ['admin', 'usuario']
+  rol?: string;  // Nombre del rol principal (para compatibilidad)
+  roles?: (Rol | string)[];  // Array flexible: objetos Rol del backend o strings
   activo: boolean;
   created_at?: string;
   updated_at?: string;
@@ -37,7 +37,7 @@ export interface CreateUsuarioDto {
   nombre: string;
   email: string;
   password: string;
-  rol: string;
+  roles: number[];  // Array de IDs de roles
   activo: boolean;
 }
 
@@ -45,6 +45,6 @@ export interface UpdateUsuarioDto {
   nombre?: string;
   email?: string;
   password?: string;
-  rol?: string;
+  roles?: number[];  // Array de IDs de roles
   activo?: boolean;
 }

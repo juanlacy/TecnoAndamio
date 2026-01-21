@@ -12,7 +12,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { UsuariosService } from '../../../core/services/usuarios.service';
+import { RolesService } from '../../../core/services/roles.service';
 import { CreateUsuarioDto, UpdateUsuarioDto } from '../../../core/models/usuario.model';
+import { Rol } from '../../../core/models/rol.model';
 import { Loading } from '../../../shared/components/loading/loading';
 
 @Component({
@@ -37,6 +39,7 @@ import { Loading } from '../../../shared/components/loading/loading';
 export class UsuariosFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private usuariosService = inject(UsuariosService);
+  private rolesService = inject(RolesService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
@@ -46,23 +49,21 @@ export class UsuariosFormComponent implements OnInit {
   isEditMode = signal(false);
   usuarioId: number | null = null;
   showPasswordField = signal(true);
-
-  roles = [
-    { value: 'admin', label: 'Administrador' },
-    { value: 'usuario', label: 'Usuario' }
-  ];
+  rolesDisponibles = signal<Rol[]>([]);
 
   constructor() {
     this.usuarioForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      rol: ['usuario', Validators.required],
+      rolId: [null, Validators.required],  // Cambiado de 'rol' a 'rolId' (número)
       activo: [true]
     });
   }
 
   ngOnInit(): void {
+    this.loadRoles();
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id && id !== 'nuevo') {
       this.usuarioId = +id;
@@ -70,6 +71,20 @@ export class UsuariosFormComponent implements OnInit {
       this.showPasswordField.set(false);
       this.loadUsuario();
     }
+  }
+
+  loadRoles(): void {
+    this.rolesService.getAll().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.rolesDisponibles.set(response.data.roles);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading roles:', error);
+        this.snackBar.open('Error al cargar roles', 'Cerrar', { duration: 3000 });
+      }
+    });
   }
 
   loadUsuario(): void {
@@ -80,11 +95,17 @@ export class UsuariosFormComponent implements OnInit {
       next: (response) => {
         if (!response.success) return;
         const usuario = response.data;
+
+        // Extraer el ID del primer rol (asumiendo que cada usuario tiene un rol principal)
+        const rolId = usuario.roles && usuario.roles.length > 0
+          ? (typeof usuario.roles[0] === 'object' ? usuario.roles[0].id : null)
+          : null;
+
         // En modo edición, la contraseña es opcional
         this.usuarioForm.patchValue({
           nombre: usuario.nombre,
           email: usuario.email,
-          rol: usuario.rol,
+          rolId: rolId,
           activo: usuario.activo
         });
 
@@ -119,7 +140,7 @@ export class UsuariosFormComponent implements OnInit {
       const updateDto: UpdateUsuarioDto = {
         nombre: formValue.nombre,
         email: formValue.email,
-        rol: formValue.rol,
+        roles: [formValue.rolId],  // Convertir rolId a array
         activo: formValue.activo
       };
 
@@ -149,7 +170,7 @@ export class UsuariosFormComponent implements OnInit {
         nombre: formValue.nombre,
         email: formValue.email,
         password: formValue.password,
-        rol: formValue.rol,
+        roles: [formValue.rolId],  // Convertir rolId a array
         activo: formValue.activo
       };
 

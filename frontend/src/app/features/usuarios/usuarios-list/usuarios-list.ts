@@ -66,7 +66,9 @@ export class UsuariosListComponent implements OnInit {
         usuario.nombre.toLowerCase().includes(term) ||
         usuario.email.toLowerCase().includes(term) ||
         (usuario.rol && usuario.rol.toLowerCase().includes(term)) ||
-        (usuario.roles && usuario.roles.some(r => r.toLowerCase().includes(term)))
+        (usuario.roles && usuario.roles.some(r =>
+          (typeof r === 'string' ? r : r.nombre).toLowerCase().includes(term)
+        ))
       );
     }
 

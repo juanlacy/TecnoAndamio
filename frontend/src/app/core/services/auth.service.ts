@@ -75,11 +75,12 @@ export class AuthService {
     const user = this.currentUser();
     if (!user) return false;
 
-    // Soporte para roles como array de strings (backend actual)
+    // Soporte para roles como array de objetos o strings
     if (user.roles && Array.isArray(user.roles)) {
-      return user.roles.some(role =>
-        role.toLowerCase() === roleName.toLowerCase()
-      );
+      return user.roles.some(role => {
+        const rName = typeof role === 'string' ? role : role.nombre;
+        return rName.toLowerCase() === roleName.toLowerCase();
+      });
     }
 
     // Soporte legacy para rol como string

@@ -35,9 +35,10 @@
               </mat-chip>
             }
             @if (user.roles && user.roles.length > 0 && !user.rol) {
-              <mat-chip [color]="getRolColor(user.roles[0])" highlighted>
-                <mat-icon>{{ user.roles[0] === 'admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
-                {{ getRolLabel(user.roles[0]) }}
+              @let firstRol = typeof user.roles[0] === 'string' ? user.roles[0] : user.roles[0].nombre;
+              <mat-chip [color]="getRolColor(firstRol)" highlighted>
+                <mat-icon>{{ firstRol === 'admin' || firstRol === 'Admin' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+                {{ getRolLabel(firstRol) }}
               </mat-chip>
             }
 

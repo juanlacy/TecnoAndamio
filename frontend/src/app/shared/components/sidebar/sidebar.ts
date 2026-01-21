@@ -75,12 +75,13 @@ export class Sidebar {
       return false;
     }
 
-    // Check roles array (backend devuelve roles como array de strings)
+    // Check roles array (backend devuelve roles como array de objetos o strings)
     if (user.roles && Array.isArray(user.roles)) {
       return item.roles.some(menuRole =>
-        user.roles!.some(userRole =>
-          userRole.toLowerCase() === menuRole.toLowerCase()
-        )
+        user.roles!.some(userRole => {
+          const roleName = typeof userRole === 'string' ? userRole : userRole.nombre;
+          return roleName.toLowerCase() === menuRole.toLowerCase();
+        })
       );
     }
 
