@@ -96,12 +96,12 @@ export const getClienteById = async (id) => {
           as: 'obras',
           required: false,
           attributes: ['id', 'nombre', 'direccion', 'activa', 'fecha_inicio'],
-          order: [['fecha_inicio', 'DESC']],
         },
       ],
       attributes: {
         exclude: ['createdAt', 'updatedAt'],
       },
+      order: [[{ model: Obra, as: 'obras' }, 'fecha_inicio', 'DESC']],
     });
 
     if (!cliente) {

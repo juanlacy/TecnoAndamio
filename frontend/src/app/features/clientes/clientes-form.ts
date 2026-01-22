@@ -55,7 +55,7 @@ export class ClientesForm implements OnInit {
       empresa: ['', [Validators.required, Validators.minLength(3)]],
       direccion: [''],
       rubro: [''],
-      correo_empresa: ['', [Validators.email]],
+      correo_empresa: [''],
       usuario_responsable_id: [null],
       activo: [true]
     });
